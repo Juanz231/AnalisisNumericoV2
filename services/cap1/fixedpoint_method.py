@@ -2,8 +2,9 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import plotly.graph_objects as go
+import re
 
-def fixedpoint_method(X0: float, Tol: float, Niter: int, Fun: str, GFun: str):
+def fixedpoint_method(X0: float, Tol: float, Niter: int, Fun: str, GFun: str, png_filename: str = "static/imgs/false_position_method/false_position_plot.png", html_filename: str = "static/imgs/false_position_method/false_position_plot.html"):
     # Lists to store iteration data
     iteraciones = []
     x_list = []
@@ -18,8 +19,9 @@ def fixedpoint_method(X0: float, Tol: float, Niter: int, Fun: str, GFun: str):
 
     while error > Tol and c < Niter:
         # Evaluate g(x) for the iteration and f(x) to track root behavior
-        g_x = eval(GFun.replace("x", str(x_current)))
-        f_x = eval(Fun.replace("x", str(x_current)))
+        x = x_current
+        g_x = eval(GFun)
+        f_x = eval(Fun)
 
         # Compute error
         error = abs(g_x - x_current)
@@ -57,12 +59,17 @@ def fixedpoint_method(X0: float, Tol: float, Niter: int, Fun: str, GFun: str):
 
     # Plotting with Matplotlib (PNG)
     x_vals = np.linspace(X0 - 2, X0 + 2, 1000)
-    f_vals = [eval(Fun.replace("x", str(x))) for x in x_vals]
-    g_vals = [eval(GFun.replace("x", str(x))) for x in x_vals]
+    f_vals = []
+    g_vals = []
+    for x in x_vals:
+        safe_fun = re.sub(r'\bx\b', f'({x})', Fun)
+        safeg_fun = re.sub(r'\bx\b', f'({x})', GFun) # Replace standalone 'x'
+        f_vals.append(eval(safe_fun, {"np": np}))
+        g_vals.append(eval(safeg_fun, {"np": np})) # Evaluate the expression    
+
     plt.figure(figsize=(10, 6))
     plt.plot(x_vals, f_vals, label=f'f(x) = {Fun}', color='blue')
     plt.plot(x_vals, g_vals, label=f'g(x) = {GFun}', color='orange')
-    plt.plot(x_vals, x_vals, label='y = x', color='green', linestyle='--')  # Line y = x
     plt.axhline(0, color='black', linewidth=0.5)
 
     # Highlight iterations
@@ -71,7 +78,10 @@ def fixedpoint_method(X0: float, Tol: float, Niter: int, Fun: str, GFun: str):
         plt.plot([x, g_x_list[i]], [g_x_list[i], g_x_list[i]], 'r--')  # Horizontal line
     
     # Add points for f(x_i) on the f(x) curve
-    f_x_iter_vals = [eval(Fun.replace("x", str(x))) for x in x_list]
+    f_x_iter_vals = []
+    for i in range(len(x_list)):
+        x = x_list[i]
+        f_x_iter_vals.append(eval(Fun))
     
     plt.scatter(x_list, f_x_iter_vals, color='purple', label='f(x) at Iterations', zorder=5)
     # Final approximation
@@ -84,7 +94,6 @@ def fixedpoint_method(X0: float, Tol: float, Niter: int, Fun: str, GFun: str):
     plt.grid(True)
 
     # Save the plot as a PNG
-    png_filename = 'Imgs/fixedpoint_method/fixed_point_plot.png'
     plt.savefig(png_filename, format='png')
     plt.close()
 
@@ -94,13 +103,12 @@ def fixedpoint_method(X0: float, Tol: float, Niter: int, Fun: str, GFun: str):
     # Function plot
     fig.add_trace(go.Scatter(x=x_vals, y=f_vals, mode='lines', name=f'f(x) = {Fun}', line=dict(color='blue')))
     fig.add_trace(go.Scatter(x=x_vals, y=g_vals, mode='lines', name=f'g(x) = {GFun}', line=dict(color='orange')))
-    fig.add_trace(go.Scatter(x=x_vals, y=x_vals, mode='lines', name='y = x', line=dict(color='green', dash='dash')))
 
     # Iteration points
     fig.add_trace(go.Scatter(x=x_list, y=g_x_list, mode='markers+lines', name="Aproximaciones", marker=dict(color='red', size=8)))
     fig.add_trace(go.Scatter(
     x=x_list,
-    y=[eval(Fun.replace("x", str(x))) for x in x_list],
+    y=f_vals,
     mode='markers',
     name='f(x) at Iterations',
     marker=dict(color='purple', size=8)
@@ -112,7 +120,6 @@ def fixedpoint_method(X0: float, Tol: float, Niter: int, Fun: str, GFun: str):
                       xaxis_title='x', yaxis_title='f(x) / g(x)',
                       template="plotly_white")
 
-    html_filename = 'Imgs/fixedpoint_method/fixed_point_plot.html'
     fig.write_html(html_filename)
 
     # Return the result and paths to the saved files

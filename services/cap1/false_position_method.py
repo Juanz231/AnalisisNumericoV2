@@ -3,8 +3,10 @@ import pandas as pd
 import math
 import matplotlib.pyplot as plt
 import plotly.graph_objects as go
+import re
 
-def false_position_method(Xi: float, Xs: float, Tol: float, Niter: int, Fun: str):
+
+def false_position_method(Xi: float, Xs: float, Tol: float, Niter: int, Fun: str, png_filename: str = "static/imgs/false_position_method/false_position_plot.png", html_filename: str = "static/imgs/false_position_method/false_position_plot.html"):
     # Lists to store iteration data
     iteraciones = []
     xi_list = []
@@ -82,14 +84,19 @@ def false_position_method(Xi: float, Xs: float, Tol: float, Niter: int, Fun: str
         'Iteración': iteraciones,
         'Xi': xi_list,
         'Xs': xs_list,
-        'Xm': xm_list,
+        'xm': xm_list,
         'f(Xm)': f_xm_list,
         'E (relativo)': error_list
     })
-    
+    print(resultados)
     # Plotting with Matplotlib (PNG)
-    x_vals = np.linspace(Xi - 1, Xs + 1, 1000)
-    y_vals = [eval(Fun.replace("x", str(x))) for x in x_vals]
+    x_vals = np.linspace(Xi - 10, Xs + 10, 1000)
+
+    y_vals = []
+    for x in x_vals:
+        safe_fun = re.sub(r'\bx\b', f'({x})', Fun)  # Replace standalone 'x'
+        y_vals.append(eval(safe_fun, {"np": np}))  # Evaluate the expression    
+    
     plt.figure(figsize=(10, 6))
     plt.plot(x_vals, y_vals, label=f'f(x) = {Fun}', color='blue')
     plt.axhline(0, color='black', linewidth=0.5)
@@ -109,7 +116,6 @@ def false_position_method(Xi: float, Xs: float, Tol: float, Niter: int, Fun: str
     plt.grid(True)
     
     # Save the plot as a PNG
-    png_filename = 'Imgs/false_position_method/false_position_plot.png'
     plt.savefig(png_filename, format='png')  # Save as PNG
     plt.close()
 
@@ -129,7 +135,6 @@ def false_position_method(Xi: float, Xs: float, Tol: float, Niter: int, Fun: str
                       xaxis_title='x', yaxis_title='f(x)',
                       template="plotly_white")
 
-    html_filename = 'Imgs/false_position_method/false_position_plot.html'
     # Save as HTML file
     fig.write_html(html_filename)
     print(resultados)

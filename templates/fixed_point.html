@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Fixed Point (Punto fijo) Method</title>
+</head>
+<body>
+    <h1>Fixed Point (Punto fijo) Method - Root Approximation</h1>
+    <form method="POST">
+        <label for="X0">X0:</label>
+        <input type="text" id="X0" name="X0" required><br><br>
+
+        <label for="Tol">Tolerance (Tol):</label>
+        <input type="text" id="Tol" name="Tol" required><br><br>
+
+        <label for="Niter">Max Iterations (Niter):</label>
+        <input type="text" id="Niter" name="Niter" required><br><br>
+
+        <label for="Fun">Function (Fun):</label>
+        <input type="text" id="Fun" name="Fun" placeholder="e.g., 'x**2 - 4'" required><br><br>
+
+        <label for="GFun">G_Function (G(x)):</label>
+        <input type="text" id="GFun" name="GFun" placeholder="e.g., 'x**2 - 4'" required><br><br>
+
+
+        <button type="submit">Calculate</button>
+    </form>
+
+    {% if result %}
+        <h2>Result</h2>
+        <p>{{ result['message'] }}</p>
+
+        {% if result.get('root') %}
+            <p>Root: {{ result['root'] }}</p>
+        {% endif %}
+
+        <h2>Iterations Table</h2>
+        <table border="1">
+            <tr>
+                <th>Iteración</th>
+                <th>Xi</th>
+                <th>f(Xi)</th>
+                <th>g(Xi)</th>
+                <th>Error</th>
+            </tr>
+            {% for row in iterations %}
+                <tr>
+                    <td>{{ row['Iteración'] }}</td>
+                    <td>{{ row['Xi'] }}</td>
+                    <td>{{ row['f(Xi)'] }}</td>
+                    <td>{{ row['g(Xi)'] }}</td>
+                    <td>{{ row['Error'] }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+
+        <h2>Graph</h2>
+        <img src="{{ png_path }}" alt="Bisection Plot">
+
+        <h3>Download Options</h3>
+        <a href="{{ html_path }}" download>Download Interactive Graph (HTML)</a>
+    {% endif %}
+</body>
+</html>

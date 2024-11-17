@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>False position (Regla falsa) Method</title>
+</head>
+<body>
+    <h1>False position (Regla falsa) Method - Root Approximation</h1>
+    <form method="POST">
+        <label for="Xi">a:</label>
+        <input type="text" id="Xi" name="Xi" required><br><br>
+
+        <label for="Xs">b:</label>
+        <input type="text" id="Xs" name="Xs" required><br><br>
+
+        <label for="Tol">Tolerance (Tol):</label>
+        <input type="text" id="Tol" name="Tol" required><br><br>
+
+        <label for="Niter">Max Iterations (Niter):</label>
+        <input type="text" id="Niter" name="Niter" required><br><br>
+
+        <label for="Fun">Function (Fun):</label>
+        <input type="text" id="Fun" name="Fun" placeholder="e.g., 'x**2 - 4'" required><br><br>
+
+        <button type="submit">Calculate</button>
+    </form>
+
+    {% if result %}
+        <h2>Result</h2>
+        <p>{{ result['message'] }}</p>
+
+        {% if result.get('root') %}
+            <p>Root: {{ result['root'] }}</p>
+        {% endif %}
+
+        <h2>Iterations Table</h2>
+        <table border="1">
+            <tr>
+                <th>Iteración</th>
+                <th>Xi</th>
+                <th>Xs</th>
+                <th>xm</th>
+                <th>f(xm)</th>
+                <th>E (relativo)</th>
+            </tr>
+            {% for row in iterations %}
+                <tr>
+                    <td>{{ row['Iteración'] }}</td>
+                    <td>{{ row['Xi'] }}</td>
+                    <td>{{ row['Xs'] }}</td>
+                    <td>{{ row['xm'] }}</td>
+                    <td>{{ row['f(xm)'] }}</td>
+                    <td>{{ row['E (relativo)'] }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+
+        <h2>Graph</h2>
+        <img src="{{ png_path }}" alt="Bisection Plot">
+
+        <h3>Download Options</h3>
+        <a href="{{ html_path }}" download>Download Interactive Graph (HTML)</a>
+    {% endif %}
+</body>
+</html>

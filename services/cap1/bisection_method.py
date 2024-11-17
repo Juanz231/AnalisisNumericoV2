@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import plotly.graph_objects as go
+import re
 
 def bisection_method(a: float, b: float, Tol: float, Niter: int, Fun: str, png_filename: str = "static/imgs/bisection_method/bisection_plot.png", html_filename: str = "static/imgs/bisection_method/bisection_plot.html"):
 
@@ -90,8 +91,11 @@ def bisection_method(a: float, b: float, Tol: float, Niter: int, Fun: str, png_f
     })
 
     # Plotting with Matplotlib (PNG)
-    x_vals = np.linspace(a - 100, b + 100, 1000)
-    y_vals = [eval(Fun.replace("x", str(x))) for x in x_vals]
+    x_vals = np.linspace(a - 10, b + 10, 1000)
+    y_vals = []
+    for x in x_vals:
+        safe_fun = re.sub(r'\bx\b', f'({x})', Fun)  # Replace standalone 'x'
+        y_vals.append(eval(safe_fun, {"np": np}))  # Evaluate the expression    
     
     plt.figure(figsize=(10, 6))
     plt.plot(x_vals, y_vals, label=f'f(x) = {Fun}', color='blue')
