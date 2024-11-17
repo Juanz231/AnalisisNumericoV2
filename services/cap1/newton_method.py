@@ -4,130 +4,121 @@ import matplotlib.pyplot as plt
 import plotly.graph_objects as go
 import re
 
-def newton_method(x0: float, Tol: float, Niter: int, Fun: str, Fun_prime: str, 
+def newton_method(x0: float, Tol: float, Niter: int, Fun: str, Fun_prime: str, error_type: str = "absolute", 
                   png_filename: str = "static/imgs/newton_method/newton_plot.png", 
                   html_filename: str = "static/imgs/newton_method/newton_plot.html"):
-    # Lists to store iteration data
-    iteraciones = []
-    xi_list = []
-    f_xi_list = []
-    error_list = []
-    
-    # Initial evaluation
-
-    x = x0
     try:
-        fx = eval(Fun)
-        fpx = eval(Fun_prime)
-    except ZeroDivisionError:
-        return {"message": "División por cero detectada en la derivada"}
-    
-    if fx == 0:
-        return {"root": x0, "message": f"{x0} es raíz de f(x)"}
-    elif fpx == 0:
-        return {"message": "Derivada cero en el punto inicial, no se puede continuar"}
+        iteraciones = []
+        xi_list = []
+        f_xi_list = []
+        error_list = []
 
-    c = 0
-    error = 1  # Initialize error to enter the loop
-    iteraciones.append(c)
-    xi_list.append(x)
-    f_xi_list.append(fx)
-    error_list.append(error)  # No error on
-    # Iterate until error < tolerance or root is found
-    while error > Tol and fx != 0 and fpx != 0 and c < Niter:
-        # Newton-Raphson formula
-        x_new = x - fx / fpx
-        
-        # Update function values
-        x = x_new
+
+        x = x0
         try:
             fx = eval(Fun)
             fpx = eval(Fun_prime)
         except ZeroDivisionError:
             return {"message": "División por cero detectada en la derivada"}
 
-        # Calculate relative error
-        error = abs(x - x0) / abs(x)
-        
-        # Store iteration results
+        if fx == 0:
+            return {"root": x0, "message": f"{x0} es raíz de f(x)"}
+        elif fpx == 0:
+            return {"message": "Derivada cero en el punto inicial, no se puede continuar"}
+
+        c = 0
+        error = 1 + Tol  # Initialize error to enter the loop
         iteraciones.append(c)
         xi_list.append(x)
         f_xi_list.append(fx)
-        error_list.append(error)
-        
-        # Prepare for next iteration
-        x0 = x
-        c += 1
+        error_list.append("N/A")  # No error on
+        while error > Tol and fx != 0 and fpx != 0 and c < Niter:
+            # Newton-Raphson formula
+            #
+            c += 1
+            x_old = x
+            x_new = x - fx / fpx
+            
+            # Update function values
+            x = x_new
+            try:
+                fx = eval(Fun)
+                fpx = eval(Fun_prime)
+            except ZeroDivisionError:
+                return {"message": "División por cero detectada en la derivada"}
 
-    # Check if we found a root or reached tolerance
-        if fx == 0:
-            result = {"root": x, "message": f"{x} es raíz de f(x)"}
-            break
-        elif error < Tol:
-            result = {"root": x, "message": f"{x} es una aproximación de una raíz de f(x) con una tolerancia {Tol}"}
-            break
+            # Calculate relative error
+            if error_type == "absolute":
+                error = abs(x - x_old)
+            else:
+                error = abs(x - x_old) / abs(x)
+            
+            # Store iteration results
+            iteraciones.append(c)
+            xi_list.append(x)
+            f_xi_list.append(fx)
+            error_list.append(error)
+            
+            # Prepare for next iteration
+            x0 = x
+
+            if error < Tol:
+                result = {"root": x, "message": f"{x} es una aproximación de una raíz de f(x) con una tolerancia {Tol}"}
+                break
+        else:
+            result = {"message": f"Fracaso en {Niter} iteraciones"}
+
+        resultados = pd.DataFrame({
+            'Iteración': iteraciones,
+            'Xi': xi_list,
+            'f(Xi)': f_xi_list,
+            'Error': error_list
+        })
+
+        x_vals = np.linspace(x0 - 5, x0 + 5, 1000)
+        f_vals = []
+        for x in x_vals:
+            f_vals.append(eval(Fun))
+
+        plt.figure(figsize=(10, 6))
+        plt.plot(x_vals, f_vals, label=f'f(x) = {Fun}', color='blue')
+        plt.axhline(0, color='black', linewidth=0.5)
+
+        for i, x in enumerate(xi_list[:-1]):
+            plt.plot([xi_list[i], xi_list[i]], [0, f_xi_list[i]], 'r--')  # Vertical line
+            plt.scatter(xi_list[i], f_xi_list[i], color='purple', zorder=5)  # Point
+
+        plt.scatter(xi_list[-1], 0, color='green', label="Aproximación Final", zorder=5)
+
+        plt.xlabel('x')
+        plt.ylabel('f(x)')
+        plt.title('Método de Newton')
+        plt.legend()
+        plt.grid(True)
+
+        plt.savefig(png_filename, format='png')
+        plt.close()
+
+        fig = go.Figure()
+
+        fig.add_trace(go.Scatter(x=x_vals, y=f_vals, mode='lines', name=f'f(x) = {Fun}', line=dict(color='blue')))
+
+        fig.add_trace(go.Scatter(x=xi_list, y=f_xi_list, mode='markers+lines', name="Aproximaciones", marker=dict(color='red', size=8)))
+
+        fig.add_trace(go.Scatter(x=[xi_list[-1]], y=[0], mode='markers', name="Aproximación Final", marker=dict(color='green', size=10)))
+
+        fig.update_layout(title='Método de Newton',
+                            xaxis_title='x', yaxis_title='f(x)',
+                            template="plotly_white")
+
+        fig.write_html(html_filename)
+    except Exception as e:
+        return {"message": str(e)}
     else:
-        result = {"message": f"Fracaso en {Niter} iteraciones"}
-    
-    # Create the table of results
-    resultados = pd.DataFrame({
-        'Iteración': iteraciones,
-        'Xi': xi_list,
-        'f(Xi)': f_xi_list,
-        'Error': error_list
-    })
-
-    # Plotting with Matplotlib (PNG)
-    x_vals = np.linspace(x0 - 5, x0 + 5, 1000)
-    f_vals = []
-    for x in x_vals:
-        f_vals.append(eval(Fun))
-
-    plt.figure(figsize=(10, 6))
-    plt.plot(x_vals, f_vals, label=f'f(x) = {Fun}', color='blue')
-    plt.axhline(0, color='black', linewidth=0.5)
-
-    # Highlight iterations
-    for i, x in enumerate(xi_list[:-1]):
-        plt.plot([xi_list[i], xi_list[i]], [0, f_xi_list[i]], 'r--')  # Vertical line
-        plt.scatter(xi_list[i], f_xi_list[i], color='purple', zorder=5)  # Point
-
-    # Final approximation
-    plt.scatter(xi_list[-1], 0, color='green', label="Aproximación Final", zorder=5)
-
-    plt.xlabel('x')
-    plt.ylabel('f(x)')
-    plt.title('Método de Newton')
-    plt.legend()
-    plt.grid(True)
-
-    # Save the plot as a PNG
-    plt.savefig(png_filename, format='png')
-    plt.close()
-
-    # Plotting with Plotly (HTML for interactivity)
-    fig = go.Figure()
-
-    # Function plot
-    fig.add_trace(go.Scatter(x=x_vals, y=f_vals, mode='lines', name=f'f(x) = {Fun}', line=dict(color='blue')))
-
-    # Iteration points
-    fig.add_trace(go.Scatter(x=xi_list, y=f_xi_list, mode='markers+lines', name="Aproximaciones", marker=dict(color='red', size=8)))
-
-    # Final approximation/root
-    fig.add_trace(go.Scatter(x=[xi_list[-1]], y=[0], mode='markers', name="Aproximación Final", marker=dict(color='green', size=10)))
-
-    fig.update_layout(title='Método de Newton',
-                      xaxis_title='x', yaxis_title='f(x)',
-                      template="plotly_white")
-
-    fig.write_html(html_filename)
-
-    # Return the result and paths to the saved files
-    return {
-        "result": result,
-        "iterations": resultados.to_dict(orient='records'),
-        "png_path": png_filename,
-        "html_path": html_filename
-    }
+        return {
+            "result": result,
+            "iterations": resultados.to_dict(orient='records'),
+            "png_path": png_filename,
+            "html_path": html_filename
+        }
 

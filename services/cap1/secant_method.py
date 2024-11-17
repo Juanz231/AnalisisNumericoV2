@@ -5,7 +5,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import plotly.graph_objects as go
 
-def secant_method(Xi: float, Xs: float, Tol: float, Niter: int, Fun: str, 
+def secant_method(Xi: float, Xs: float, Tol: float, Niter: int, Fun: str, error_type: str = "absolute", 
                   png_filename: str = "static/imgs/secant_method/secant_plot.png", 
                   html_filename: str = "static/imgs/secant_method/secant_plot.html"):
     # Lists for storing iteration data
@@ -14,115 +14,124 @@ def secant_method(Xi: float, Xs: float, Tol: float, Niter: int, Fun: str,
     f_xi_list = []
     error_list = []
     
-    # Initial evaluation
-    x = Xi
-    fi = eval(Fun)
-    x = Xs
-    fs = eval(Fun)
-    
-    # Check if initial guesses are roots
-    if fi == 0:
-        return {"root": Xi, "message": f"{Xi} es raíz de f(x)"}
-    elif fs == 0:
-        return {"root": Xs, "message": f"{Xs} es raíz de f(x)"}
-    else:
-        c = 0
-        Xm = Xi - (fi * (Xs - Xi)) / (fs - fi)
-        x = Xm
-        fe = eval(Fun)
-
-        # Store initial iteration
-        iteraciones.append(c)
-        xi_list.append(Xm)
-        f_xi_list.append(fe)
-        error_list.append(1)  # Arbitrary large initial error
-
-        # Iterate until convergence
-        while error_list[-1] > Tol and fe != 0 and c < Niter:
-            Xi_old = Xi
-            Xi = Xs
-            Xs = Xm
-            fi = fs
-            fs = fe
-
-            # Avoid division by zero
-            if fs - fi == 0:
-                return {"message": "División por cero detectada durante el cálculo"}
-            
+    try:
+        # Initial evaluation
+        x = Xi
+        fi = eval(Fun)
+        x = Xs
+        fs = eval(Fun)
+        
+        # Check if initial guesses are roots
+        if fi == 0:
+            return {"root": Xi, "message": f"{Xi} es raíz de f(x)"}
+        elif fs == 0:
+            return {"root": Xs, "message": f"{Xs} es raíz de f(x)"}
+        else:
+            c = 0
             Xm = Xi - (fi * (Xs - Xi)) / (fs - fi)
             x = Xm
             fe = eval(Fun)
 
-            Error = abs(Xm - Xs) / abs(Xm)
-
-            c += 1
+            Error = 1 + Tol  # Initialize error to enter
+            # Store initial iteration
             iteraciones.append(c)
             xi_list.append(Xm)
             f_xi_list.append(fe)
-            error_list.append(Error)
+            error_list.append("N/A")  # Arbitrary large initial error
 
-        # Check for convergence or failure
-            if fe == 0:
-                result = {"root": Xm, "message": f"{Xm} es raíz de f(x)"}
-                break
-            elif error_list[-1] < Tol:
-                result = {"root": Xm, "message": f"{Xm} es una aproximación de una raíz de f(x) con una tolerancia {Tol}"}
-                break
-        else:
-            result = {"message": f"Fracaso en {Niter} iteraciones"}
-        
-        # Create a DataFrame for results
-        resultados = pd.DataFrame({
-            'Iteración': iteraciones,
-            'Xi': xi_list,
-            'f(Xi)': f_xi_list,
-            'Error': error_list
-        })
+            # Iterate until convergence
+            while Error > Tol and fe != 0 and c < Niter:
+                Xi_old = Xi
+                Xi = Xs
+                Xs = Xm
+                fi = fs
+                fs = fe
 
-        # Plotting with Matplotlib (PNG)
-        x_vals = np.linspace(min(Xi, Xs) - 5, max(Xi, Xs) + 5, 1000)
-        f_vals = [eval(Fun) for x in x_vals]
+                # Avoid division by zero
+                if fs - fi == 0:
+                    return {"message": "División por cero detectada durante el cálculo"}
+                
+                Xm = Xi - (fi * (Xs - Xi)) / (fs - fi)
+                x = Xm
+                fe = eval(Fun)
+                    
+                if error_type == "absolute":
+                    Error = abs(Xm - Xs)
+                else:
+                    Error = abs(Xm - Xs) / abs(Xm)
 
-        plt.figure(figsize=(10, 6))
-        plt.plot(x_vals, f_vals, label=f'f(x) = {Fun}', color='blue')
-        plt.axhline(0, color='black', linewidth=0.5)
+                c += 1
+                iteraciones.append(c)
+                xi_list.append(Xm)
+                f_xi_list.append(fe)
+                error_list.append(Error)
 
-        # Highlight iterations
-        for i, x in enumerate(xi_list[:-1]):
-            plt.plot([xi_list[i], xi_list[i]], [0, f_xi_list[i]], 'r--')  # Vertical line
-            plt.scatter(xi_list[i], f_xi_list[i], color='purple', zorder=5)  # Point
+            # Check for convergence or failure
+                if error_list[-1] < Tol:
+                    result = {"root": Xm, "message": f"{Xm} es una aproximación de una raíz de f(x) con una tolerancia {Tol}"}
+                    break
+            else:
+                result = {"message": f"Fracaso en {Niter} iteraciones"}
+            
+            # Create a DataFrame for results
+            resultados = pd.DataFrame({
+                'Iteración': iteraciones,
+                'Xi': xi_list,
+                'f(Xi)': f_xi_list,
+                'Error': error_list
+            })
 
-        # Final approximation
-        plt.scatter(xi_list[-1], 0, color='green', label="Aproximación Final", zorder=5)
+            # Plotting with Matplotlib (PNG)
+            right_bound_df = (Xs / 10) + 10
+            left_bound_df = (Xi / 10) + 10
+            x_vals = np.linspace(min(Xi, Xs) - left_bound_df, max(Xi, Xs) + right_bound_df, 2000)
+            f_vals = [eval(Fun) for x in x_vals]
 
-        plt.xlabel('x')
-        plt.ylabel('f(x)')
-        plt.title('Método de la Secante')
-        plt.legend()
-        plt.grid(True)
+            plt.figure(figsize=(10, 6))
+            plt.plot(x_vals, f_vals, label=f'f(x) = {Fun}', color='blue')
+            plt.axhline(0, color='black', linewidth=0.5)
 
-        # Save the plot as a PNG
-        plt.savefig(png_filename, format='png')
-        plt.close()
+            # Highlight iterations
+            for i, x in enumerate(xi_list[:-1]):
+                plt.plot([xi_list[i], xi_list[i]], [0, f_xi_list[i]], 'r--')  # Vertical line
+                plt.scatter(xi_list[i], f_xi_list[i], color='purple', zorder=5)  # Point
 
-        # Plotting with Plotly (HTML for interactivity)
-        fig = go.Figure()
+            # Final approximation
+            plt.scatter(xi_list[-1], 0, color='green', label="Aproximación Final", zorder=5)
 
-        # Function plot
-        fig.add_trace(go.Scatter(x=x_vals, y=f_vals, mode='lines', name=f'f(x) = {Fun}', line=dict(color='blue')))
+            plt.xlabel('x')
+            plt.ylabel('f(x)')
+            plt.title('Método de la Secante')
+            plt.legend()
+            plt.grid(True)
 
-        # Iteration points
-        fig.add_trace(go.Scatter(x=xi_list, y=f_xi_list, mode='markers+lines', name="Aproximaciones", marker=dict(color='red', size=8)))
+            # Save the plot as a PNG
+            plt.savefig(png_filename, format='png')
+            plt.close()
 
-        # Final approximation/root
-        fig.add_trace(go.Scatter(x=[xi_list[-1]], y=[0], mode='markers', name="Aproximación Final", marker=dict(color='green', size=10)))
+            # Plotting with Plotly (HTML for interactivity)
+            fig = go.Figure()
 
-        fig.update_layout(title='Método de la Secante',
-                          xaxis_title='x', yaxis_title='f(x)',
-                          template="plotly_white")
+            # Function plot
+            fig.add_trace(go.Scatter(x=x_vals, y=f_vals, mode='lines', name=f'f(x) = {Fun}', line=dict(color='blue')))
 
-        fig.write_html(html_filename)
+            # Iteration points
+            fig.add_trace(go.Scatter(x=xi_list, y=f_xi_list, mode='markers+lines', name="Aproximaciones", marker=dict(color='red', size=8)))
 
+            # Final approximation/root
+            fig.add_trace(go.Scatter(x=[xi_list[-1]], y=[0], mode='markers', name="Aproximación Final", marker=dict(color='green', size=10)))
+
+            fig.update_layout(title='Método de la Secante',
+                            xaxis_title='x', yaxis_title='f(x)',
+                            template="plotly_white")
+
+            fig.write_html(html_filename)
+    except ZeroDivisionError:
+        return {"message": "División por cero"}
+    
+    except Exception as e:
+        return {"message": f"Error: {e}"}
+    else:
         # Return results and plot paths
         return {
             "result": result,

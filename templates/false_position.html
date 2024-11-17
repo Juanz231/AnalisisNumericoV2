@@ -32,7 +32,7 @@
         {% if result.get('root') %}
             <p>Root: {{ result['root'] }}</p>
         {% endif %}
-
+        {% if iterations %}
         <h2>Iterations Table</h2>
         <table border="1">
             <tr>
@@ -54,12 +54,15 @@
                 </tr>
             {% endfor %}
         </table>
-
+        {% endif %}
+        {% if png_path %}
         <h2>Graph</h2>
-        <img src="{{ png_path }}" alt="Bisection Plot">
-
+        <img src="{{ png_path }}" alt="False Position Plot">
+        {% endif %}
+        {% if html_path %}
         <h3>Download Options</h3>
         <a href="{{ html_path }}" download>Download Interactive Graph (HTML)</a>
+        {% endif %}
     {% endif %}
 </body>
 </html>

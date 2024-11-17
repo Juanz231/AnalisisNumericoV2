@@ -1,8 +1,61 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Newton-Raphson (Newton-Raphson) Method</title>
+    <style>
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: 0.4s;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: 0.4s;
+        }
+
+        input:checked + .slider {
+            background-color: #2196F3;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+
+        .slider.round {
+            border-radius: 34px;
+        }
+
+        .slider.round:before {
+            border-radius: 50%;
+        }
+    </style>
 </head>
 <body>
     <h1>Newton-Raphson (Newton-Raphson) Method - Root Approximation</h1>
@@ -21,6 +74,13 @@
 
         <label for="Der">Firts derivative (F'(X)):</label>
         <input type="text" id="Der" name="Der" placeholder="e.g., '2x'" required><br><br>
+
+        <label for="error-type">Error Type:</label>
+        <label class="switch">
+            <input type="checkbox" id="error-type" name="error_type" value="absolute">
+            <span class="slider round"></span>
+        </label>
+        <span id="error-label">Relative</span><br><br>
 
         <button type="submit">Calculate</button>
     </form>
@@ -59,5 +119,15 @@
         <a href="{{ html_path }}" download>Download Interactive Graph (HTML)</a>
         {% endif %}
     {% endif %}
+
+    <script>
+        const errorSwitch = document.getElementById("error-type");
+        const errorLabel = document.getElementById("error-label");
+
+        errorSwitch.addEventListener("change", () => {
+            errorLabel.textContent = errorSwitch.checked ? "Absolute" : "Relative";
+        });
+    </script>
 </body>
 </html>
+
