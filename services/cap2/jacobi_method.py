@@ -5,10 +5,6 @@ import matplotlib.pyplot as plt
 import plotly.graph_objects as go
 
 def jacobi_method(A, b, x0, tol, niter, et, png_filename="static/imgs/jacobi_method/jacobi_plot.png", html_filename="static/imgs/jacobi_method/jacobi_plot.html"):
-    """
-    Implementación del método de Jacobi para resolver sistemas de ecuaciones lineales.
-    Incluye generación de gráficos de convergencia y visualización del sistema si tiene 2 ecuaciones.
-    """
     os.makedirs(os.path.dirname(png_filename), exist_ok=True)
 
     n = len(b)
@@ -56,7 +52,11 @@ def jacobi_method(A, b, x0, tol, niter, et, png_filename="static/imgs/jacobi_met
         result_msg = f"Fracaso en {niter} iteraciones\n"
 
     # Crear la tabla de resultados
-    table = pd.DataFrame({'Iteración': N, 'Aproximación (xn)': [list(x) for x in xi], 'Error': E})
+    table = pd.DataFrame({
+        'Iteración': N,
+        'Aproximación (xn)': [', '.join([f'{val:.5f}' for val in x]) for x in xi],  # Mostrar aproximaciones con 5 decimales
+        'Error': [f'{e:.5e}' for e in E]  # Mostrar el error en notación científica con 5 decimales
+    })
 
     # Generar gráficos con Matplotlib (PNG)
     plt.figure(figsize=(10, 6))

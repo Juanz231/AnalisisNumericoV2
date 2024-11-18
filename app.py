@@ -254,6 +254,10 @@ def jacobi():
         # Llamar al método de Jacobi
         result = jacobi_method(A, b, x0, tol, niter, et)
 
+        # Obtener el radio espectral y la convergencia
+        Re = result.get("Re")  # Asumiendo que el método jacobi_method devuelve el radio espectral
+        convergence_message = "El método converge." if abs(Re) < 1 else "El método no converge."
+
         # Generar las URL de los gráficos
         if result.get("png_path") and result.get("html_path"):
             png_url = url_for("static", filename=result.get("png_path").replace("static/", ""))
@@ -262,11 +266,16 @@ def jacobi():
             return render_template("jacobi.html", result=result["result"], 
                                    iterations=result.get("iterations"),
                                    png_path=png_url,
-                                   html_path=html_url
+                                   html_path=html_url,
+                                   Re=Re,
+                                   convergence_message=convergence_message
             ) 
+
         # Si no se generan gráficos, solo pasar resultados
         return render_template("jacobi.html", result=result["result"], 
                                iterations=result.get("iterations"),
+                               Re=Re,
+                               convergence_message=convergence_message
         )
 
     return render_template('jacobi.html')
