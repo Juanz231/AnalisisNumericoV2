@@ -125,7 +125,7 @@ def bisection_method(a: float, b: float, Tol: float, Niter: int, Fun: str, error
         fig = go.Figure()
 
         # Function plot
-        fig.add_trace(go.Scatter(x=x_vals, y=y_vals, mode='lines', name=f'f(x) = {Fun}', line=dict(color='blue')))
+        fig.add_trace(go.Scatter(x=x_vals, y=y_vals, mode='lines', name=f'f(x) = {Fun}'))
         
         # Mark the midpoints as they refine to the root
         fig.add_trace(go.Scatter(x=xm_list, y=f_xm_list, mode='markers+lines', name="Aproximaciones", marker=dict(color='red', size=8)))

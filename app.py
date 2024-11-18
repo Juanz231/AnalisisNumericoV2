@@ -22,23 +22,26 @@ def landing():
 def bisection():
     if request.method == 'POST':
         # Get form data
-        a = float(request.form['a'])
-        b = float(request.form['b'])
-        Tol = float(request.form['Tol'])
-        Niter = int(request.form['Niter'])
-        Fun = request.form['Fun']
-        error_type = request.form.get("error_type", "relative")  # Default to relative
-        # Run bisection method
-        result = bisection_method(a, b, Tol, Niter, Fun, error_type)
-        if result.get("png_path") and result.get("html_path"):
-            png_url = url_for("static", filename=result.get("png_path").replace("static/", ""))
-            html_url = url_for("static", filename=result.get("html_path").replace("static/", ""))
-    
-            return render_template("bisection.html", result=result["result"], 
-                               iterations=result.get("iterations"),
-                               png_path=png_url,
-                               html_path=html_url
-            ) 
+        try:
+            a = float(request.form['a'])
+            b = float(request.form['b'])
+            Tol = float(request.form['Tol'])
+            Niter = int(request.form['Niter'])
+            Fun = request.form['Fun']
+            error_type = request.form.get("error_type", "relative")  # Default to relative
+            # Run bisection method
+            result = bisection_method(a, b, Tol, Niter, Fun, error_type)
+            if result.get("png_path") and result.get("html_path"):
+                png_url = url_for("static", filename=result.get("png_path").replace("static/", ""))
+                html_url = url_for("static", filename=result.get("html_path").replace("static/", ""))
+        
+                return render_template("bisection.html", result=result["result"], 
+                                iterations=result.get("iterations"),
+                                png_path=png_url,
+                                html_path=html_url
+                )
+        except Exception as e:
+            return render_template("bisection.html", result={"message": "Ingrese todos los valores y bien parcerito"})
         # Pass results to template
         return render_template("bisection.html", result=result, 
                                iterations=result.get("iterations"),
@@ -55,23 +58,27 @@ def download_file(filename):
 def false_position():
     if request.method == 'POST':
         # Get form data
-        Xi = float(request.form['Xi'])
-        Xs = float(request.form['Xs'])
-        Tol = float(request.form['Tol'])
-        Niter = int(request.form['Niter'])
-        Fun = request.form['Fun']
-        error_type = request.form.get("error_type", "relative")
-        # Run false position method
-        result = false_position_method(Xi, Xs, Tol, Niter, Fun, error_type)
-        if result.get("png_path") and result.get("html_path"):
-            png_url = url_for("static", filename=result.get("png_path").replace("static/", ""))
-            html_url = url_for("static", filename=result.get("html_path").replace("static/", ""))
-    
-            return render_template("false_position.html", result=result["result"], 
-                               iterations=result.get("iterations"),
-                               png_path=png_url,
-                               html_path=html_url
-            ) 
+        try:
+            Xi = float(request.form['Xi'])
+            Xs = float(request.form['Xs'])
+            Tol = float(request.form['Tol'])
+            Niter = int(request.form['Niter'])
+            Fun = request.form['Fun']
+            error_type = request.form.get("error_type", "relative")
+            # Run false position method
+            result = false_position_method(Xi, Xs, Tol, Niter, Fun, error_type)
+            if result.get("png_path") and result.get("html_path"):
+                png_url = url_for("static", filename=result.get("png_path").replace("static/", ""))
+                html_url = url_for("static", filename=result.get("html_path").replace("static/", ""))
+        
+                return render_template("false_position.html", result=result["result"], 
+                                iterations=result.get("iterations"),
+                                png_path=png_url,
+                                html_path=html_url
+                )
+        except Exception as e:
+            return render_template("false_position.html", result={"message": "Ingrese todos los valores y bien parcerito"})
+
         # Pass results to template
         return render_template("false_position.html", result=result, 
                                iterations=result.get("iterations"),
@@ -84,28 +91,32 @@ def false_position():
 def fixed_point():
     if request.method == 'POST':
         # Get form data
-        X0 = float(request.form['X0'])
-        Tol = float(request.form['Tol'])
-        Niter = int(request.form['Niter'])
-        Fun = request.form['Fun']
-        GFun = request.form['GFun']
-        error_type = request.form.get("error_type", "relative")
-        # Run fixed point method
-        result = fixedpoint_method(X0, Tol, Niter, Fun, GFun, error_type)
+        try:
+            X0 = float(request.form['X0'])
+            Tol = float(request.form['Tol'])
+            Niter = int(request.form['Niter'])
+            Fun = request.form['Fun']
+            GFun = request.form['GFun']
+            error_type = request.form.get("error_type", "relative")
+            # Run fixed point method
+            result = fixedpoint_method(X0, Tol, Niter, Fun, GFun, error_type)
+            
+            if result.get("png_path") and result.get("html_path"):
+                png_url = url_for("static", filename=result.get("png_path").replace("static/", ""))
+                html_url = url_for("static", filename=result.get("html_path").replace("static/", ""))
         
-        if result.get("png_path") and result.get("html_path"):
-            png_url = url_for("static", filename=result.get("png_path").replace("static/", ""))
-            html_url = url_for("static", filename=result.get("html_path").replace("static/", ""))
-    
-            return render_template("fixed_point.html", result=result['result'], 
-                               iterations=result.get("iterations"),
-                               png_path=png_url,
-                               html_path=html_url
-            ) 
-        # Pass results to template
-        return render_template("fixed_point.html", result=result, 
-                               iterations=result.get("iterations"),
-        )
+                return render_template("fixed_point.html", result=result['result'], 
+                                iterations=result.get("iterations"),
+                                png_path=png_url,
+                                html_path=html_url
+                ) 
+            # Pass results to template
+        except Exception as e:
+            return render_template("fixed_point.html", result={"message": "Ingrese todos los valores y bien parcerito"})
+        else:
+            return render_template("fixed_point.html", result=result, 
+                                   iterations=result.get("iterations"),
+            )
     # GET request - show form
     return render_template('fixed_point.html')
 
@@ -113,26 +124,29 @@ def fixed_point():
 def multiple_roots():
     if request.method == 'POST':
         # Get form data
-        X0 = float(request.form['X0'])
-        Tol = float(request.form['Tol'])
-        Niter = int(request.form['Niter'])
-        Fun = request.form['Fun']
-        Derivative1 = request.form['Der1']
-        Derivative2 = request.form['Der2']
-        error_type = request.form.get("error_type", "relative")
-        # Run multiple roots method
-        result = multiple_roots_method(X0, Tol, Niter, Fun, Derivative1, Derivative2, error_type)
+        try:
+            X0 = float(request.form['X0'])
+            Tol = float(request.form['Tol'])
+            Niter = int(request.form['Niter'])
+            Fun = request.form['Fun']
+            Derivative1 = request.form['Der1']
+            Derivative2 = request.form['Der2']
+            error_type = request.form.get("error_type", "relative")
+            # Run multiple roots method
+            result = multiple_roots_method(X0, Tol, Niter, Fun, Derivative1, Derivative2, error_type)
 
-        if result.get("png_path") and result.get("html_path"):
-            png_url = url_for("static", filename=result.get("png_path").replace("static/", ""))
-            html_url = url_for("static", filename=result.get("html_path").replace("static/", ""))
-    
-            return render_template("multiple_roots.html", result=result["result"], 
-                               iterations=result.get("iterations"),
-                               png_path=png_url,
-                               html_path=html_url
-            ) 
-        # Pass results to template
+            if result.get("png_path") and result.get("html_path"):
+                png_url = url_for("static", filename=result.get("png_path").replace("static/", ""))
+                html_url = url_for("static", filename=result.get("html_path").replace("static/", ""))
+        
+                return render_template("multiple_roots.html", result=result["result"], 
+                                iterations=result.get("iterations"),
+                                png_path=png_url,
+                                html_path=html_url
+                ) 
+        except Exception as e:
+            return render_template("multiple_roots.html", result={"message": "Ingrese todos los valores y bien parcerito"})
+
         return render_template("multiple_roots.html", result=result, 
                                iterations=result.get("iterations"),
         )
@@ -143,60 +157,66 @@ def multiple_roots():
 @app.route('/methods/newton/', methods=['GET', 'POST'])
 def newton():
     if request.method == "POST":
-        x0 = float(request.form["X0"])
-        Tol = float(request.form["Tol"])
-        Niter = int(request.form["Niter"])
-        Fun = request.form["Fun"]
-        Der = request.form["Der"]
-        error_type = request.form.get("error_type", "relative")
+        try:
+            x0 = float(request.form["X0"])
+            Tol = float(request.form["Tol"])
+            Niter = int(request.form["Niter"])
+            Fun = request.form["Fun"]
+            Der = request.form["Der"]
+            error_type = request.form.get("error_type", "relative")
 
-        # Call the Newton-Raphson method
-        png_url = None
-        html_url = None
-        result = newton_method(x0, Tol, Niter, Fun, Der, error_type)
-        if result.get("png_path") and result.get("html_path"):
-            png_url = url_for("static", filename=result.get("png_path").replace("static/", ""))
-            html_url = url_for("static", filename=result.get("html_path").replace("static/", ""))
-    
-            return render_template("newton.html", result=result["result"], 
-                               iterations=result.get("iterations"),
-                               png_path=png_url,
-                               html_path=html_url
-            ) 
-        # Pass results to template
+            # Call the Newton-Raphson method
+            png_url = None
+            html_url = None
+            result = newton_method(x0, Tol, Niter, Fun, Der, error_type)
+            if result.get("png_path") and result.get("html_path"):
+                png_url = url_for("static", filename=result.get("png_path").replace("static/", ""))
+                html_url = url_for("static", filename=result.get("html_path").replace("static/", ""))
+        
+                return render_template("newton.html", result=result["result"], 
+                                iterations=result.get("iterations"),
+                                png_path=png_url,
+                                html_path=html_url
+                ) 
+        except Exception as e:
+            return render_template("newton.html", result={"message": "Ingrese todos los valores y bien parcerito"})
+
+            # Pass results to template
         return render_template("newton.html", result=result, 
-                               iterations=result.get("iterations"),
+                                iterations=result.get("iterations"),
         )
     return render_template("newton.html")
 
 @app.route('/methods/secant/', methods=['GET', 'POST'])
 def secant():
     if request.method == 'POST':
-        # Get form data
-        Xi = float(request.form['Xi'])
-        Xs = float(request.form['Xs'])
-        Tol = float(request.form['Tol'])
-        Niter = int(request.form['Niter'])
-        Fun = request.form['Fun']
-        error_type = request.form.get("error_type", "relative")
-        # Run false position method
-        result = secant_method(Xi, Xs, Tol, Niter, Fun, error_type)
-        # Ensure static file paths are correctly handled
-        if result.get("png_path") and result.get("html_path"):
-            png_url = url_for("static", filename=result.get("png_path").replace("static/", ""))
-            html_url = url_for("static", filename=result.get("html_path").replace("static/", ""))
-    
-            return render_template("secant.html", result=result["result"],
-                               iterations=result.get("iterations"),
-                               png_path=png_url,
-                               html_path=html_url
-            ) 
-        # Pass results to template
+        try:
+            # Get form data
+            Xi = float(request.form['Xi'])
+            Xs = float(request.form['Xs'])
+            Tol = float(request.form['Tol'])
+            Niter = int(request.form['Niter'])
+            Fun = request.form['Fun']
+            error_type = request.form.get("error_type", "relative")
+            # Run false position method
+            result = secant_method(Xi, Xs, Tol, Niter, Fun, error_type)
+            # Ensure static file paths are correctly handled
+            if result.get("png_path") and result.get("html_path"):
+                png_url = url_for("static", filename=result.get("png_path").replace("static/", ""))
+                html_url = url_for("static", filename=result.get("html_path").replace("static/", ""))
+        
+                return render_template("secant.html", result=result["result"],
+                                iterations=result.get("iterations"),
+                                png_path=png_url,
+                                html_path=html_url
+                ) 
+            # Pass results to template
+        except Exception as e:
+            return render_template("secant.html", result={"message": "Ingrese todos los valores y bien parcerito"})
+
         return render_template("secant.html", result=result, 
                                iterations=result.get("iterations"),
         )
-
-    
     # GET request - show form
     return render_template('secant.html')
 
