@@ -5,6 +5,10 @@ from services.cap1.fixedpoint_method import fixedpoint_method
 from services.cap1.multiple_roots_method import multiple_roots_method
 from services.cap1.newton_method import newton_method
 from services.cap1.secant_method import secant_method
+from services.cap2.gauss_seidel_method import gauss_seidel_method
+from services.cap2.jacobi_method import jacobi_method
+from services.cap2.sor_method import sor_method
+import numpy as np
 import os
 
 app = Flask(__name__, static_folder="static")
@@ -191,6 +195,102 @@ def secant():
     
     # GET request - show form
     return render_template('secant.html')
+
+@app.route('/methods/gauss_seidel/', methods=['GET', 'POST'])
+def gauss_seidel():
+    if request.method == 'POST':
+        # Obtener los datos del formulario
+        A = np.array([[float(num) for num in row.split(',')] for row in request.form['matrixA'].split(';')])
+        b = np.array([float(num) for num in request.form['vectorB'].split(',')])
+        x0 = np.array([float(num) for num in request.form['x0'].split(',')])
+        tol = float(request.form['Tol'])
+        niter = int(request.form['Niter'])
+        et = request.form['error_type']
+
+        # Llamar al método de Gauss-Seidel
+        result = gauss_seidel_method(A, b, x0, tol, niter, et)
+
+        # Generar las URL de los gráficos
+        if result.get("png_path") and result.get("html_path"):
+            png_url = url_for("static", filename=result.get("png_path").replace("static/", ""))
+            html_url = url_for("static", filename=result.get("html_path").replace("static/", ""))
+
+            return render_template("gauss_seidel.html", result=result["result"], 
+                                   iterations=result.get("iterations"),
+                                   png_path=png_url,
+                                   html_path=html_url
+            ) 
+        # Si no se generan gráficos, solo pasar resultados
+        return render_template("gauss_seidel.html", result=result["result"], 
+                               iterations=result.get("iterations"),
+        )
+
+    return render_template('gauss_seidel.html')
+
+
+@app.route('/methods/jacobi/', methods=['GET', 'POST'])
+def jacobi():
+    if request.method == 'POST':
+        # Obtener los datos del formulario
+        A = np.array([[float(num) for num in row.split(',')] for row in request.form['matrixA'].split(';')])
+        b = np.array([float(num) for num in request.form['vectorB'].split(',')])
+        x0 = np.array([float(num) for num in request.form['x0'].split(',')])
+        tol = float(request.form['tol'])
+        niter = int(request.form['niter'])
+        et = request.form['error_type']
+
+        # Llamar al método de Jacobi
+        result = jacobi_method(A, b, x0, tol, niter, et)
+
+        # Generar las URL de los gráficos
+        if result.get("png_path") and result.get("html_path"):
+            png_url = url_for("static", filename=result.get("png_path").replace("static/", ""))
+            html_url = url_for("static", filename=result.get("html_path").replace("static/", ""))
+
+            return render_template("jacobi.html", result=result["result"], 
+                                   iterations=result.get("iterations"),
+                                   png_path=png_url,
+                                   html_path=html_url
+            ) 
+        # Si no se generan gráficos, solo pasar resultados
+        return render_template("jacobi.html", result=result["result"], 
+                               iterations=result.get("iterations"),
+        )
+
+    return render_template('jacobi.html')
+
+
+@app.route('/methods/sor/', methods=['GET', 'POST'])
+def sor():
+    if request.method == 'POST':
+        # Obtener los datos del formulario
+        A = np.array([[float(num) for num in row.split(',')] for row in request.form['matrixA'].split(';')])
+        b = np.array([float(num) for num in request.form['vectorB'].split(',')])
+        x0 = np.array([float(num) for num in request.form['x0'].split(',')])
+        tol = float(request.form['Tol'])
+        niter = int(request.form['Niter'])
+        et = request.form['error_type']
+        w = float(request.form['w'])  # Valor de omega para SOR
+
+        # Llamar al método de SOR
+        result = sor_method(A, b, x0, tol, niter, et, w)
+
+        # Generar las URL de los gráficos
+        if result.get("png_path") and result.get("html_path"):
+            png_url = url_for("static", filename=result.get("png_path").replace("static/", ""))
+            html_url = url_for("static", filename=result.get("html_path").replace("static/", ""))
+
+            return render_template("sor.html", result=result["result"], 
+                                   iterations=result.get("iterations"),
+                                   png_path=png_url,
+                                   html_path=html_url
+            ) 
+        # Si no se generan gráficos, solo pasar resultados
+        return render_template("sor.html", result=result["result"], 
+                               iterations=result.get("iterations"),
+        )
+
+    return render_template('sor.html')
 
 
 if __name__ == '__main__':

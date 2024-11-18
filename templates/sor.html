@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SOR Method</title>
+</head>
+<body>
+    <h1>SOR Method - Linear System Solver</h1>
+    <form method="POST">
+        <label for="matrixA">Matrix A (comma-separated rows, semicolon-separated entries):</label><br>
+        <textarea id="matrixA" name="matrixA" rows="4" cols="50" placeholder="e.g., 4,-1,0; -1,4,-1; 0,-1,4" required></textarea><br><br>
+
+        <label for="vectorB">Vector B (comma-separated):</label>
+        <input type="text" id="vectorB" name="vectorB" placeholder="e.g., 15,10,10" required><br><br>
+
+        <label for="x0">Initial Guess (x0, comma-separated):</label>
+        <input type="text" id="x0" name="x0" placeholder="e.g., 0,0,0" required><br><br>
+
+        <label for="tol">Tolerance (Tol):</label>
+        <input type="text" id="tol" name="tol" required><br><br>
+
+        <label for="niter">Max Iterations (Niter):</label>
+        <input type="text" id="niter" name="niter" required><br><br>
+
+        <label for="w">Relaxation Factor (w):</label>
+        <input type="text" id="w" name="w" placeholder="e.g., 1.25" required><br><br>
+
+        <label for="error_type">Error Type:</label>
+        <select id="error_type" name="error_type">
+            <option value="Error Absoluto">Absolute Error</option>
+            <option value="Error Relativo">Relative Error</option>
+        </select><br><br>
+
+        <button type="submit">Calculate</button>
+    </form>
+
+    {% if result %}
+        <h2>Result</h2>
+        <p>{{ result['message'] }}</p>
+
+        {% if iterations %}
+        <h2>Iterations Table</h2>
+        <table border="1">
+            <tr>
+                <th>Iteration</th>
+                <th>Approximation (x)</th>
+                <th>Error</th>
+            </tr>
+            {% for row in iterations %}
+                <tr>
+                    <td>{{ row['Iteration'] }}</td>
+                    <td>{{ row['Approximation (x)'] }}</td>
+                    <td>{{ row['Error'] }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+        {% endif %}
+
+        {% if png_path %}
+        <h2>Error Convergence Graph</h2>
+        <img src="{{ png_path }}" alt="Error Convergence Plot">
+        {% endif %}
+
+        {% if html_path %}
+        <h3>Download Options</h3>
+        <a href="{{ html_path }}" download>Download Interactive Graph (HTML)</a>
+        {% endif %}
+
+        {% if system_plot_png %}
+        <h2>System Visualization (for 2x2 Systems)</h2>
+        <img src="{{ system_plot_png }}" alt="System Plot">
+        {% endif %}
+
+        {% if system_plot_html %}
+        <h3>Download Interactive System Graph (HTML)</h3>
+        <a href="{{ system_plot_html }}" download>Download System Graph</a>
+        {% endif %}
+    {% endif %}
+</body>
+</html>

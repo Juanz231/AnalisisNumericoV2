@@ -4,11 +4,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import plotly.graph_objects as go
 
-def sor(A, b, x0, tol, niter, w, et, png_filename="static/imgs/sor_method/sor_plot.png", html_filename="static/imgs/sor_method/sor_plot.html"):
-    """
-    Implementación del método SOR para resolver sistemas de ecuaciones lineales.
-    Incluye generación de gráficos de convergencia y visualización del sistema si tiene 2 ecuaciones.
-    """
+def sor_method(A, b, x0, tol, niter, w, et, png_filename="static/imgs/sor_method/sor_plot.png", html_filename="static/imgs/sor_method/sor_plot.html"):
     os.makedirs(os.path.dirname(png_filename), exist_ok=True)
 
     n = len(b)

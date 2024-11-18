@@ -4,7 +4,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import plotly.graph_objects as go
 
-def jacobi(A, b, x0, tol, niter, et, png_filename="static/imgs/jacobi_method/jacobi_plot.png", html_filename="static/imgs/jacobi_method/jacobi_plot.html"):
+def jacobi_method(A, b, x0, tol, niter, et, png_filename="static/imgs/jacobi_method/jacobi_plot.png", html_filename="static/imgs/jacobi_method/jacobi_plot.html"):
     """
     Implementación del método de Jacobi para resolver sistemas de ecuaciones lineales.
     Incluye generación de gráficos de convergencia y visualización del sistema si tiene 2 ecuaciones.

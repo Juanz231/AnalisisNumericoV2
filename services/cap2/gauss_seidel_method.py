@@ -4,7 +4,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import plotly.graph_objects as go
 
-def gauss_seidel(A, b, x0, tol, niter, et, png_filename="static/imgs/gauss_seidel_method/gauss_seidel_plot.png", html_filename="static/imgs/gauss_seidel_method/gauss_seidel_plot.html"):
+def gauss_seidel_method(A, b, x0, tol, niter, et, png_filename="static/imgs/gauss_seidel_method/gauss_seidel_plot.png", html_filename="static/imgs/gauss_seidel_method/gauss_seidel_plot.html"):
     # Asegurar que las carpetas existen para guardar las imágenes
     os.makedirs(os.path.dirname(png_filename), exist_ok=True)
 
