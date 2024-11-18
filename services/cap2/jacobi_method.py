@@ -5,7 +5,10 @@ import matplotlib.pyplot as plt
 import plotly.graph_objects as go
 
 def jacobi(A, b, x0, tol, niter, et, png_filename="static/imgs/jacobi_method/jacobi_plot.png", html_filename="static/imgs/jacobi_method/jacobi_plot.html"):
-    # Asegurar que las carpetas existen
+    """
+    Implementación del método de Jacobi para resolver sistemas de ecuaciones lineales.
+    Incluye generación de gráficos de convergencia y visualización del sistema si tiene 2 ecuaciones.
+    """
     os.makedirs(os.path.dirname(png_filename), exist_ok=True)
 
     n = len(b)
@@ -53,11 +56,11 @@ def jacobi(A, b, x0, tol, niter, et, png_filename="static/imgs/jacobi_method/jac
         result_msg = f"Fracaso en {niter} iteraciones\n"
 
     # Crear la tabla de resultados
-    table = pd.DataFrame({'Iteración': N, 'Aproximación (xn)': xi, 'Error': E})
+    table = pd.DataFrame({'Iteración': N, 'Aproximación (xn)': [list(x) for x in xi], 'Error': E})
 
     # Generar gráficos con Matplotlib (PNG)
     plt.figure(figsize=(10, 6))
-    plt.plot(N, E, label='Error en cada iteración', color='blue')
+    plt.plot(N, E, label='Error en cada iteración', color='blue', marker='o')
     plt.xlabel('Iteraciones')
     plt.ylabel('Error')
     plt.title('Método de Jacobi - Convergencia del Error')
@@ -90,45 +93,60 @@ def jacobi(A, b, x0, tol, niter, et, png_filename="static/imgs/jacobi_method/jac
         "Re": Re
     }
 
-def _plot_system(A, b, solution):
-    # Ecuaciones
+def _plot_system(A, b, solution, png_filename="static/imgs/jacobi_method/system_plot.png", html_filename="static/imgs/jacobi_method/system_plot.html"):
+    os.makedirs(os.path.dirname(png_filename), exist_ok=True)
+
+    # Datos para las líneas
     x = np.linspace(-10, 10, 400)
     y1 = (b[0] - A[0][0] * x) / A[0][1]
     y2 = (b[1] - A[1][0] * x) / A[1][1]
-    
-    # Graficar las líneas de las ecuaciones
+
+    # Gráfico PNG con Matplotlib
     plt.figure(figsize=(6, 6))
     plt.plot(x, y1, label=r'$a_{11}x + a_{12}y = b_1$', color='blue')
     plt.plot(x, y2, label=r'$a_{21}x + a_{22}y = b_2$', color='green')
-    
-    # Graficar la solución
     plt.plot(solution[0], solution[1], 'ro', label="Solución")
-    
-    plt.xlim([-10, 10])
-    plt.ylim([-10, 10])
     plt.axhline(0, color='black', linewidth=1)
     plt.axvline(0, color='black', linewidth=1)
+    plt.xlim([-10, 10])
+    plt.ylim([-10, 10])
     plt.xlabel('x')
     plt.ylabel('y')
-    plt.title('Gráfica del Sistema de Ecuaciones')
+    plt.title('Sistema de Ecuaciones - Jacobi')
     plt.legend(loc='best')
     plt.grid(True)
-    plt.show()
+    plt.savefig(png_filename, format='png')  # Guardar como PNG
+    plt.close()
 
-# Ejemplo de uso de la función:
-A = np.array([[4, -1], [-1, 4]], dtype=float)
-b = np.array([15, 10], dtype=float)
-x0 = np.array([0, 0], dtype=float)
-tol = 1e-6
-niter = 25
-et = 'Error Absoluto'
+    # Gráfico HTML interactivo con Plotly
+    fig = go.Figure()
+    fig.add_trace(go.Scatter(x=x, y=y1, mode='lines', name=r'$a_{11}x + a_{12}y = b_1$', line=dict(color='blue')))
+    fig.add_trace(go.Scatter(x=x, y=y2, mode='lines', name=r'$a_{21}x + a_{22}y = b_2$', line=dict(color='green')))
+    fig.add_trace(go.Scatter(x=[solution[0]], y=[solution[1]], mode='markers', name="Solución",
+                             marker=dict(color='red', size=10)))
+    fig.update_layout(
+        title='Sistema de Ecuaciones - Jacobi',
+        xaxis_title='x',
+        yaxis_title='y',
+        template='plotly_white'
+    )
+    fig.write_html(html_filename)
 
-# Llamada a la función
-result = jacobi(A, b, x0, tol, niter, et)
 
-# Mostrar resultados en consola
-print(result["result"])
-print("\nTabla de iteraciones:")
-print(pd.DataFrame(result["iterations"]).to_string(index=False))
-print(f"\nRadio espectral de T = {result['Re']}")
-print(result["converge_msg"])
+# # Ejemplo de uso de la función:
+# A = np.array([[4, -1], [-1, 4]], dtype=float)
+# b = np.array([15, 10], dtype=float)
+# x0 = np.array([0, 0], dtype=float)
+# tol = 1e-6
+# niter = 25
+# et = 'Error Absoluto'
+
+# # Llamada a la función
+# result = jacobi(A, b, x0, tol, niter, et)
+
+# # Mostrar resultados en consola
+# print(result["result"])
+# print("\nTabla de iteraciones:")
+# print(pd.DataFrame(result["iterations"]).to_string(index=False))
+# print(f"\nRadio espectral de T = {result['Re']}")
+# print(result["converge_msg"])
