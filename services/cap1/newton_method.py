@@ -75,7 +75,10 @@ def newton_method(x0: float, Tol: float, Niter: int, Fun: str, Fun_prime: str, e
             'Error': [str(e) for e in error_list]
         })
 
-        x_vals = np.linspace(x0 - 5, x0 + 5, 1000)
+        if xi_list[-1] < x0:
+            x_vals = np.linspace(xi_list[-1] - 2, x0 + 2, 1000)
+        else:
+            x_vals = np.linspace(x0 - 2, xi_list[-1] + 2, 1000)
         f_vals = []
         for x in x_vals:
             f_vals.append(eval(Fun))

@@ -97,13 +97,13 @@ def fixed_point():
             png_url = url_for("static", filename=result.get("png_path").replace("static/", ""))
             html_url = url_for("static", filename=result.get("html_path").replace("static/", ""))
     
-            return render_template("fixed_point.html", result=result, 
+            return render_template("fixed_point.html", result=result['result'], 
                                iterations=result.get("iterations"),
                                png_path=png_url,
                                html_path=html_url
             ) 
         # Pass results to template
-        return render_template("fixed_point.html", result=result["result"], 
+        return render_template("fixed_point.html", result=result, 
                                iterations=result.get("iterations"),
         )
     # GET request - show form

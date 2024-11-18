@@ -13,52 +13,55 @@ def fixedpoint_method(X0: float, Tol: float, Niter: int, Fun: str, GFun: str, er
     error_list = []
     try:
         # Initial setup
+        # Initial setup
         c = 0
         error = Tol + 1  # Initialize error greater than tolerance
         x_current = X0
+        error_list.append("N/A")  # No error on the first iteration
         
-        try:
-            # Evaluate the functions with the initial value
-            f_x = eval(Fun)
-            g_x = eval(GFun)
-        except DivideByZeroError:
-            return {"message": "División por cero en la evaluación de la función. Intente con otro valor inicial."}
-
-        if f_x == 0:
-            return {"root": g_x, "message": f"{x_current} es raíz de f(x)"}
-
-        iteraciones.append(c)
-        x_list.append(x_current)
-        g_x_list.append(g_x)
-        f_x_list.append(f_x)
-        error_list.append("N/A")
-
         while error > Tol and c < Niter:
-            # Evaluate g(x) for the iteration and f(x) to track root behavior
-            x = x_current
-            g_x = eval(GFun)
-            f_x = eval(Fun)
+            # Store the current value of x
+            x_old = x_current
+            x = x_old
+            # Evaluate g(x) and f(x) at the current x
+            g_x = eval(GFun)  # g(x)
+            f_x = eval(Fun)   # f(x)
 
-            # Compute error
+            # Compute the error based on the selected type
             if error_type == "absolute":
-                error = abs(g_x - x_current)
-            else:
-                error = abs(g_x - x_current) / abs(g_x)
+                error = abs(g_x - x_old)  # Use x_old for the previous value
+            else:  # relative error
+                if abs(g_x) > 1e-12:  # Prevent division by zero
+                    error = abs(g_x - x_old) / abs(g_x)
+                else:
+                    error = float('inf')  # Set a large error if division is unstable
+            
+
+            # Update x_current for the next iteration
+            x_current = g_x
+
+            # Increment iteration count
+            c += 1
 
             # Store iteration data
             iteraciones.append(c)
-            x_list.append(x_current)
+            x_list.append(x_old)
             g_x_list.append(g_x)
             f_x_list.append(f_x)
-            error_list.append(error)
-
-            # Check if the function value is close to zero
-            if error < Tol:
-                result = {"root": g_x, "message": f"{g_x} es una aproximación de una raíz de f(x) con tolerancia {Tol} en {c} iteraciones"}
-                break
-            # Update for next iteration
+            
+            # Compute the absolute error
+            # Update x_current for the next iteration
             x_current = g_x
+
+            # Increment iteration count
             c += 1
+
+            # Check for root
+            if error < Tol:
+                result = {"root": g_x, "message": f"{g_x} es una aproximación de una raíz de f(x) con tolerancia {Tol} y un error de {str(error)} en {c} iteraciones"}
+                break
+            
+            error_list.append(error)
 
         else:
             # If the loop finishes without finding a root
@@ -74,7 +77,10 @@ def fixedpoint_method(X0: float, Tol: float, Niter: int, Fun: str, GFun: str, er
         })
 
         # Plotting with Matplotlib (PNG)
-        x_vals = np.linspace(X0 - 2, X0 + 2, 1000)
+        if x_list[-1] < X0:
+            x_vals = np.linspace(x_list[-1] - 2, X0 + 2, 1000)
+        else:
+            x_vals = np.linspace(X0 - 2, x_list[-1] + 2, 1000)
         f_vals = []
         g_vals = []
         for x in x_vals:
@@ -86,6 +92,7 @@ def fixedpoint_method(X0: float, Tol: float, Niter: int, Fun: str, GFun: str, er
         plt.figure(figsize=(10, 6))
         plt.plot(x_vals, f_vals, label=f'f(x) = {Fun}', color='blue')
         plt.plot(x_vals, g_vals, label=f'g(x) = {GFun}', color='orange')
+        plt.plot(x_vals, x_vals, label='y = x', color='green', linestyle='dashed')
         plt.axhline(0, color='black', linewidth=0.5)
 
         # Highlight iterations
@@ -119,12 +126,12 @@ def fixedpoint_method(X0: float, Tol: float, Niter: int, Fun: str, GFun: str, er
         # Function plot
         fig.add_trace(go.Scatter(x=x_vals, y=f_vals, mode='lines', name=f'f(x) = {Fun}', line=dict(color='blue')))
         fig.add_trace(go.Scatter(x=x_vals, y=g_vals, mode='lines', name=f'g(x) = {GFun}', line=dict(color='orange')))
-
+        fig.add_trace(go.Scatter(x=x_vals, y=x_vals, mode='lines', name='y = x', line=dict(color='green', dash='dash')))
         # Iteration points
         fig.add_trace(go.Scatter(x=x_list, y=g_x_list, mode='markers+lines', name="Aproximaciones", marker=dict(color='red', size=8)))
         fig.add_trace(go.Scatter(
         x=x_list,
-        y=f_vals,
+        y=f_x_list,
         mode='markers',
         name='f(x) at Iterations',
         marker=dict(color='purple', size=8)
@@ -138,6 +145,7 @@ def fixedpoint_method(X0: float, Tol: float, Niter: int, Fun: str, GFun: str, er
 
         fig.write_html(html_filename)
     except Exception as e:
+        print(e)
         return {"message": str(e)}
 
     else:

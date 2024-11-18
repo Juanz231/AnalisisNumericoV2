@@ -87,12 +87,12 @@ def false_position_method(Xi: float, Xs: float, Tol: float, Niter: int, Fun: str
             'Xi': [str(x) for x in xi_list],
             'Xs': [str(x) for x in xs_list],
             'xm': [str(x) for x in xm_list],
-            'f(Xm)': [str(f) for f in f_xm_list],
+            'f(xm)': [str(f) for f in f_xm_list],
             'E (relativo)': [str(e) for e in error_list]
         })
         print(resultados)
         # Plotting with Matplotlib (PNG)
-        x_vals = np.linspace(Xi - 10, Xs + 10, 1000)
+        x_vals = np.linspace(Xi - 2, Xs + 2, 1000)
 
         y_vals = []
         for x in x_vals:
