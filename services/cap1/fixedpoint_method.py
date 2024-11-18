@@ -67,10 +67,10 @@ def fixedpoint_method(X0: float, Tol: float, Niter: int, Fun: str, GFun: str, er
         # Store results in a DataFrame for output
         resultados = pd.DataFrame({
             'Iteración': iteraciones,
-            'Xi': x_list,
-            'g(Xi)': g_x_list,
-            'f(Xi)': f_x_list,
-            'Error': error_list
+            'Xi': [str(x) for x in x_list],
+            'g(Xi)': [str(x) for x in g_x_list],
+            'f(Xi)': [str(f) for f in f_x_list],
+            'Error': [str(e) for e in error_list]
         })
 
         # Plotting with Matplotlib (PNG)

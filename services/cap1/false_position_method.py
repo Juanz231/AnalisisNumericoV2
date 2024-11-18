@@ -84,11 +84,11 @@ def false_position_method(Xi: float, Xs: float, Tol: float, Niter: int, Fun: str
         # Store results in a DataFrame for output
         resultados = pd.DataFrame({
             'Iteración': iteraciones,
-            'Xi': xi_list,
-            'Xs': xs_list,
-            'xm': xm_list,
-            'f(Xm)': f_xm_list,
-            'E (relativo)': error_list
+            'Xi': [str(x) for x in xi_list],
+            'Xs': [str(x) for x in xs_list],
+            'xm': [str(x) for x in xm_list],
+            'f(Xm)': [str(f) for f in f_xm_list],
+            'E (relativo)': [str(e) for e in error_list]
         })
         print(resultados)
         # Plotting with Matplotlib (PNG)

@@ -70,9 +70,9 @@ def newton_method(x0: float, Tol: float, Niter: int, Fun: str, Fun_prime: str, e
 
         resultados = pd.DataFrame({
             'Iteración': iteraciones,
-            'Xi': xi_list,
-            'f(Xi)': f_xi_list,
-            'Error': error_list
+            'Xi': [str(x) for x in xi_list],
+            'f(Xi)': [str(fx) for fx in f_xi_list],
+            'Error': [str(e) for e in error_list]
         })
 
         x_vals = np.linspace(x0 - 5, x0 + 5, 1000)

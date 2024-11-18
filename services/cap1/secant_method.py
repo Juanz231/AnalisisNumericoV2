@@ -40,7 +40,7 @@ def secant_method(Xi: float, Xs: float, Tol: float, Niter: int, Fun: str, error_
             error_list.append("N/A")  # Arbitrary large initial error
 
             # Iterate until convergence
-            while Error > Tol and fe != 0 and c < Niter:
+            while Error > Tol and c < Niter:
                 Xi_old = Xi
                 Xi = Xs
                 Xs = Xm
@@ -67,7 +67,7 @@ def secant_method(Xi: float, Xs: float, Tol: float, Niter: int, Fun: str, error_
                 error_list.append(Error)
 
             # Check for convergence or failure
-                if error_list[-1] < Tol:
+                if Error < Tol:
                     result = {"root": Xm, "message": f"{Xm} es una aproximación de una raíz de f(x) con una tolerancia {Tol}"}
                     break
             else:
@@ -76,9 +76,9 @@ def secant_method(Xi: float, Xs: float, Tol: float, Niter: int, Fun: str, error_
             # Create a DataFrame for results
             resultados = pd.DataFrame({
                 'Iteración': iteraciones,
-                'Xi': xi_list,
-                'f(Xi)': f_xi_list,
-                'Error': error_list
+                'Xi': [str(x) for x in xi_list],
+                'f(Xi)': [str(f) for f in f_xi_list],
+                'Error': [str(e) for e in error_list]
             })
 
             # Plotting with Matplotlib (PNG)
