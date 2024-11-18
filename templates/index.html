@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block title %}Landing Page{% endblock %}
+
+{% block content %}
+<header class="bg-primary text-white text-center py-5">
+    <div class="container">
+        <h1>Analis Numérico</h1>
+    </div>
+</header>
+
+<section id="cap1" class="py-5">
+    <div class="container">
+        <h2 class="text-center mb-4">Capítulo 1: Métodos de Raíces</h2>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Bisección</h5>
+                        <p class="card-text">Método de bisección para encontrar raíces.</p>
+                        <a href="/methods/bisection/" class="btn btn-primary">Ir al método</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Falsa Posición</h5>
+                        <p class="card-text">Método de falsa posición para aproximar raíces.</p>
+                        <a href="/methods/false_position/" class="btn btn-primary">Ir al método</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Punto Fijo</h5>
+                        <p class="card-text">Método de punto fijo para soluciones iterativas.</p>
+                        <a href="/methods/fixed_point/" class="btn btn-primary">Ir al método</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="cap2" class="py-5 bg-light">
+    <div class="container">
+        <h2 class="text-center mb-4">Capítulo 2: Métodos Iterativos para Sistemas de Ecuaciones</h2>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Gauss-Seidel</h5>
+                        <p class="card-text">Resuelve sistemas lineales mediante iteraciones.</p>
+                        <a href="/methods/gauss_seidel/" class="btn btn-primary">Ir al método</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Jacobi</h5>
+                        <p class="card-text">Itera para soluciones aproximadas de sistemas lineales.</p>
+                        <a href="/methods/jacobi/" class="btn btn-primary">Ir al método</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">SOR</h5>
+                        <p class="card-text">Método de relajación sucesiva para convergencia más rápida.</p>
+                        <a href="/methods/sor/" class="btn btn-primary">Ir al método</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

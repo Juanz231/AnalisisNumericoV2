@@ -14,6 +14,10 @@ import os
 app = Flask(__name__, static_folder="static")
 app.config['UPLOAD_FOLDER'] = 'static/imgs/bisection_method'
 
+@app.route('/')
+def landing():
+    return render_template('index.html')
+
 @app.route('/methods/bisection/', methods=['GET', 'POST'])
 def bisection():
     if request.method == 'POST':
@@ -295,4 +299,3 @@ def sor():
 
 if __name__ == '__main__':
     app.run(debug=True)
-
