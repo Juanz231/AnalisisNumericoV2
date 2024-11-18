@@ -50,20 +50,20 @@ def multiple_roots_method(
                 error = abs(x_new - x) / abs(x_new)
             
             # Update lists with current iteration data
+            x = x_new
             iteraciones.append(c)
             x_list.append(x_new)
             f_x_list.append(eval(Fun))
             error_list.append(error)
 
             # Update x and re-evaluate functions for the next iteration
-            x = x_new
             fx = eval(Fun)
             f_prime = eval(Derivative1)
             f_double_prime = eval(Derivative2)
 
             # Stop if the root is found or tolerance is met
             if error < Tol:
-                result = {"root": x, "message": f"{x} es una aproximación de una raíz de f(x) con tolerancia {Tol} en {c} iteraciones"}
+                result = {"root": str(x_new), "message": f"{x} es una aproximación de una raíz de f(x) con tolerancia {Tol} en {c} iteraciones"}
                 break
         else:
             result = {"message": f"Fracaso en {Niter} iteraciones"}
@@ -77,7 +77,10 @@ def multiple_roots_method(
         })
 
         # Plotting with Matplotlib (PNG)
-        x_vals = np.linspace(x0 - 10, x0 + 10, 1000)
+        if x_list[-1] < x0:
+            x_vals = np.linspace(x_list[-1] - 2, x0 + 2, 1000)
+        else:
+            x_vals = np.linspace(x0 - 2, x_list[-1] + 2, 1000)
         f_vals = []
         for x in x_vals:
             f_vals.append(eval(Fun))
