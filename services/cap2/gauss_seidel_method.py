@@ -36,9 +36,9 @@ def gauss_seidel_method(A, b, x0, tol, niter, et, png_filename="static/imgs/gaus
 
         # Calcular error
         if et == 'Error Absoluto':
-            current_error = np.linalg.norm(x1 - x0, ord=np.inf)
+            current_error = np.linalg.norm(abs(x1 - x0), ord=np.inf)
         else:
-            current_error = np.linalg.norm((x1 - x0) / x1, ord=np.inf)
+            current_error = np.linalg.norm(abs(x1 - x0) / abs(x1), ord=np.inf)
 
         # Almacenar datos de la iteración
         iteraciones.append(c)
@@ -58,8 +58,8 @@ def gauss_seidel_method(A, b, x0, tol, niter, et, png_filename="static/imgs/gaus
 
     # Crear tabla de resultados
     resultados = pd.DataFrame({
-        "Iteración": iteraciones,
-        "Aproximación (xn)": [list(ap) for ap in aproximaciones],
+        "Iteracion": iteraciones,
+        "Aproximacion (xn)": [str(ap) for ap in aproximaciones],
         "Error": errores
     })
 
