@@ -290,12 +290,13 @@ def sor():
         x0 = np.array([float(num) for num in request.form['x0'].split(',')])
         tol = float(request.form['tol'])
         niter = int(request.form['niter'])
-        et = request.form['error_type']
+        et = request.form['error_type']  # Tipo de error
         w = float(request.form['w'])  # Valor de omega para SOR
 
         # Llamar al método de SOR
-        result = sor_method(A, b, x0, tol, niter, et, w)
-
+        result = sor_method(A, b, x0, tol, niter, w, et)
+        
+        Re = result.get("Re") 
         # Generar las URL de los gráficos
         if result.get("png_path") and result.get("html_path"):
             png_url = url_for("static", filename=result.get("png_path").replace("static/", ""))
@@ -304,11 +305,15 @@ def sor():
             return render_template("sor.html", result=result["result"], 
                                    iterations=result.get("iterations"),
                                    png_path=png_url,
-                                   html_path=html_url
+                                   html_path=html_url,
+                                   converge_msg=result.get("converge_msg"),
+                                   Re=result.get("Re")
             ) 
         # Si no se generan gráficos, solo pasar resultados
         return render_template("sor.html", result=result["result"], 
                                iterations=result.get("iterations"),
+                               converge_msg=result.get("converge_msg"),
+                               Re=Re,
         )
 
     return render_template('sor.html')

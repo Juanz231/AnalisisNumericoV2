@@ -52,7 +52,11 @@ def sor_method(A, b, x0, tol, niter, w, et, png_filename="static/imgs/sor_method
         result_msg = f"Fracaso en {niter} iteraciones\n"
 
     # Crear la tabla de resultados
-    table = pd.DataFrame({'Iteración': N, 'Aproximación (xn)': [list(x) for x in xi], 'Error': E})
+    table = pd.DataFrame({
+        'Iteración': N,
+        'Aproximación (xn)': ['[' + ', '.join(f'{val:.4f}' for val in x) + ']' for x in xi],
+        'Error': E
+    })
 
     # Generar gráficos con Matplotlib (PNG)
     plt.figure(figsize=(10, 6))
@@ -138,7 +142,7 @@ def _plot_system(A, b, solution, png_filename="static/imgs/sor_method/system_plo
 # et = 'Error Absoluto'
 
 # # Llamada a la función
-# result = sor(A, b, x0, tol, niter, w, et)
+# result = sor_method(A, b, x0, tol, niter, w, et)
 
 # # Mostrar resultados en consola
 # print(result["result"])
