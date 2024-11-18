@@ -207,12 +207,16 @@ def gauss_seidel():
         A = np.array([[float(num) for num in row.split(',')] for row in request.form['matrixA'].split(';')])
         b = np.array([float(num) for num in request.form['vectorB'].split(',')])
         x0 = np.array([float(num) for num in request.form['x0'].split(',')])
-        tol = float(request.form['Tol'])
-        niter = int(request.form['Niter'])
+        tol = float(request.form['tol'])
+        niter = int(request.form['niter'])
         et = request.form['error_type']
 
         # Llamar al método de Gauss-Seidel
         result = gauss_seidel_method(A, b, x0, tol, niter, et)
+
+        # Determinar si el método converge o no, basado en el radio espectral
+        Re = result.get("Re")
+        convergence_message = "The method converges." if abs(Re) < 1 else "The method does not converge."
 
         # Generar las URL de los gráficos
         if result.get("png_path") and result.get("html_path"):
@@ -222,11 +226,15 @@ def gauss_seidel():
             return render_template("gauss_seidel.html", result=result["result"], 
                                    iterations=result.get("iterations"),
                                    png_path=png_url,
-                                   html_path=html_url
+                                   html_path=html_url,
+                                   Re=Re,
+                                   convergence_message=convergence_message  # Añadir el mensaje de convergencia
             ) 
         # Si no se generan gráficos, solo pasar resultados
         return render_template("gauss_seidel.html", result=result["result"], 
                                iterations=result.get("iterations"),
+                               Re=Re,
+                               convergence_message=convergence_message,  # Añadir el mensaje de convergencia
         )
 
     return render_template('gauss_seidel.html')
@@ -271,8 +279,8 @@ def sor():
         A = np.array([[float(num) for num in row.split(',')] for row in request.form['matrixA'].split(';')])
         b = np.array([float(num) for num in request.form['vectorB'].split(',')])
         x0 = np.array([float(num) for num in request.form['x0'].split(',')])
-        tol = float(request.form['Tol'])
-        niter = int(request.form['Niter'])
+        tol = float(request.form['tol'])
+        niter = int(request.form['niter'])
         et = request.form['error_type']
         w = float(request.form['w'])  # Valor de omega para SOR
 

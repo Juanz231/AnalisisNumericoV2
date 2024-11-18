@@ -59,8 +59,8 @@ def gauss_seidel_method(A, b, x0, tol, niter, et, png_filename="static/imgs/gaus
     # Crear tabla de resultados
     resultados = pd.DataFrame({
         "Iteración": iteraciones,
-        "Aproximación (xn)": [list(ap) for ap in aproximaciones],
-        "Error": errores
+        "Aproximación (xn)": [', '.join([f'{float(val):.6f}' for val in ap]) for ap in aproximaciones],  # Convertir a flotantes y formatear
+        "Error": [f'{err:.6f}' for err in errores]  # Formatear los errores también
     })
 
     # Generar gráfico PNG con Matplotlib
@@ -146,7 +146,7 @@ def _plot_system(A, b, solution, png_filename="static/imgs/gauss_seidel_method/s
 # niter = 25
 # et = 'Error Absoluto'
 
-# result = gauss_seidel(A, b, x0, tol, niter, et)
+# result = gauss_seidel_method(A, b, x0, tol, niter, et)
 
 # # Mostrar resultados
 # print(result["result"])
