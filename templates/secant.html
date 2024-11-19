@@ -4,9 +4,6 @@
 {% block title %}Secante Method{% endblock %}
 
 {% block content %}
-{% if not result %}
-{% include "alert.html" %}
-{% endif %}
 {% if input_error %}
 {% include "input_alert.html" %}
 {% endif %}
@@ -53,6 +50,9 @@
             </div>
         </div>
     </form>
+    {% if not result %}
+    {% include "alert.html" %}
+    {% endif %}
 
     {% if result %}
         <div class="mt-5">
