@@ -1,56 +1,56 @@
 {% extends 'base.html' %}
 
-{% block title %}Jacobi Method{% endblock %}
+{% block title %}Método de Jacobi{% endblock %}
 
 {% block content %}
 {% if input_error %}
 {% include "input_alert.html" %}
 {% endif %}
 <div class="container my-5">
-    <h1 class="text-center text-primary mb-4">Jacobi Method</h1>
-    <p class="text-center">Solve linear systems iteratively using the Jacobi Method.</p>
+    <h1 class="text-center text-primary mb-4">Método de Jacobi</h1>
+    <p class="text-center">Resuelve sistemas lineales de manera iterativa utilizando el Método de Jacobi.</p>
     <form method="POST" class="needs-validation" novalidate>
         <div class="row">
             <div class="col-md-6 mb-3">
-                <label for="matrixA" class="form-label">Matrix A (comma-separated rows, semicolon-separated entries):</label>
-                <textarea id="matrixA" name="matrixA" class="form-control" rows="4" placeholder="e.g., 4,-1,0; -1,4,-1; 0,-1,4" required></textarea>
+                <label for="matrixA" class="form-label">Matriz A (filas separadas por comas, entradas separadas por punto y coma):</label>
+                <textarea id="matrixA" name="matrixA" class="form-control" rows="4" placeholder="ejemplo: 4,-1,0; -1,4,-1; 0,-1,4" required></textarea>
             </div>
             <div class="col-md-6 mb-3">
-                <label for="vectorB" class="form-label">Vector B (comma-separated):</label>
-                <input type="text" id="vectorB" name="vectorB" class="form-control" placeholder="e.g., 15,10,10" required>
+                <label for="vectorB" class="form-label">Vector B (separado por comas):</label>
+                <input type="text" id="vectorB" name="vectorB" class="form-control" placeholder="ejemplo: 15,10,10" required>
             </div>
         </div>
         <div class="row">
             <div class="col-md-6 mb-3">
-                <label for="x0" class="form-label">Initial Guess (x0, comma-separated):</label>
-                <input type="text" id="x0" name="x0" class="form-control" placeholder="e.g., 0,0,0" required>
+                <label for="x0" class="form-label">Adivinanza Inicial (x0, separada por comas):</label>
+                <input type="text" id="x0" name="x0" class="form-control" placeholder="ejemplo: 0,0,0" required>
             </div>
             <div class="col-md-3 mb-3">
-                <label for="tol" class="form-label">Tolerance (Tol):</label>
-                <input type="number" step="any" id="tol" name="tol" class="form-control" placeholder="e.g., 0.001" required>
+                <label for="tol" class="form-label">Tolerancia (Tol):</label>
+                <input type="number" step="any" id="tol" name="tol" class="form-control" placeholder="ejemplo: 0.001" required>
             </div>
             <div class="col-md-3 mb-3">
-                <label for="niter" class="form-label">Max Iterations (Niter):</label>
-                <input type="number" id="niter" name="niter" class="form-control" placeholder="e.g., 100" required>
+                <label for="niter" class="form-label">Máximas Iteraciones (Niter):</label>
+                <input type="number" id="niter" name="niter" class="form-control" placeholder="ejemplo: 100" required>
             </div>
         </div>
         <div class="row">
             <div class="col-md-6 mb-3">
-                <label for="error_type" class="form-label">Error Type:</label>
+                <label for="error_type" class="form-label">Tipo de Error:</label>
                 <select id="error_type" name="error_type" class="form-select">
-                    <option value="Error Absoluto" selected>Absolute Error</option>
-                    <option value="Error Relativo">Relative Error</option>
+                    <option value="Error Absoluto" selected>Error Absoluto</option>
+                    <option value="Error Relativo">Error Relativo</option>
                 </select>
             </div>
             <div class="col-md-6 d-flex align-items-end">
-                <button type="submit" class="btn btn-primary w-100">Calculate</button>
+                <button type="submit" class="btn btn-primary w-100">Calcular</button>
             </div>
         </div>
     </form>
 
     {% if result %}
     <div class="mt-5">
-        <h2 class="text-success">Result</h2>
+        <h2 class="text-success">Resultado</h2>
         <p>{{ result }}</p>
 
         {% if convergence_message %}
@@ -58,18 +58,18 @@
         {% endif %}
 
         {% if Re %}
-        <h3 class="mt-4">Spectral Radius</h3>
-        <p>The spectral radius (Re) of the iteration matrix is: <strong>{{ Re }}</strong></p>
+        <h3 class="mt-4">Radio Espectral</h3>
+        <p>El radio espectral (Re) de la matriz de iteración es: <strong>{{ Re }}</strong></p>
         {% endif %}
 
         {% if iterations %}
-        <h3 class="mt-4">Iterations Table</h3>
+        <h3 class="mt-4">Tabla de Iteraciones</h3>
         <div class="table-responsive">
             <table class="table table-striped table-bordered">
                 <thead class="table-dark">
                     <tr>
-                        <th>Iteration</th>
-                        <th>Approximation (x)</th>
+                        <th>Iteración</th>
+                        <th>Aproximación (x)</th>
                         <th>Error</th>
                     </tr>
                 </thead>
@@ -77,7 +77,7 @@
                     {% for row in iterations %}
                     <tr>
                         <td>{{ row['Iteración'] }}</td>
-                        <td>{{ row['Aproximación (xn)'] }}</td>  <!-- Show approximations as text -->
+                        <td>{{ row['Aproximación (xn)'] }}</td>  <!-- Mostrar las aproximaciones como texto -->
                         <td>{{ row['Error'] }}</td>
                     </tr>
                     {% endfor %}
@@ -90,14 +90,14 @@
         <div class="row mt-4">
             {% if html_path %}
             <div class="col-md-6">
-                <h3 class="mt-4">Error Convergence Graph</h3>
+                <h3 class="mt-4">Gráfico de Convergencia del Error</h3>
                 <iframe src="{{ html_path }}" width="100%" height="500px" class="border"></iframe>
             </div>
             {% endif %}
 
             {% if system_plot_html %}
             <div class="col-md-6">
-                <h3 class="mt-4">System Visualization (for 2x2 Systems)</h3>
+                <h3 class="mt-4">Visualización del Sistema (para sistemas 2x2)</h3>
                 <iframe src="{{ system_plot_html }}" width="100%" height="500px" class="border"></iframe>
             </div>
             {% endif %}
@@ -107,15 +107,15 @@
         <div class="row mt-4">
             {% if png_path %}
             <div class="col-md-6">
-                <h4 class="mt-4">Download Error Convergence (PNG)</h4>
-                <a href="{{ png_path }}" class="btn btn-outline-primary" download>Download PNG</a>
+                <h4 class="mt-4">Descargar Convergencia del Error (PNG)</h4>
+                <a href="{{ png_path }}" class="btn btn-outline-primary" download>Descargar PNG</a>
             </div>
             {% endif %}
 
             {% if system_plot_png %}
             <div class="col-md-6">
-                <h4 class="mt-4">Download System Graph (PNG)</h4>
-                <a href="{{ system_plot_png }}" class="btn btn-outline-primary" download>Download PNG</a>
+                <h4 class="mt-4">Descargar Gráfico del Sistema (PNG)</h4>
+                <a href="{{ system_plot_png }}" class="btn btn-outline-primary" download>Descargar PNG</a>
             </div>
             {% endif %}
         </div>

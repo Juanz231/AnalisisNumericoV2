@@ -268,7 +268,7 @@ def gauss_seidel():
 
             # Determinar si el método converge o no, basado en el radio espectral
             Re = result.get("Re")
-            convergence_message = "The method converges." if abs(Re) < 1 else "The method does not converge."
+            convergence_message = "El método converge." if abs(Re) < 1 else "El método no converge."
 
             # Generar las URL de los gráficos principales (error de convergencia)
             png_url = None
