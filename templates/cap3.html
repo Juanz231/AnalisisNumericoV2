@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}Capítulo #3{% endblock %}
+
+{% block content %}
+<section id="cap2" class="py-5">
+    <div class="container">
+        <h2 class="text-center mb-4">Capítulo 2: Métodos de Interpolación</h2>
+        
+        <div class="row">
+            <!-- Main Methods -->
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Metodo de Lagrange</h5>
+                        <p class="card-text">Método de Lagrange para encontrar el polinomio que interpola un conjunto de puntos dados.</p>
+                        <a href="/methods/lagrange/" class="btn btn-primary">Ir al método</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Vandermonde</h5>
+                        <p class="card-text">Obtiene el polinomio interpolante mediante matrices.</p>
+                        <a href="/methods/vandermonde/" class="btn btn-primary">Ir al método</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">SOR</h5>
+                        <p class="card-text">Método de relajación sucesiva (SOR) para la solución de sistemas lineales.</p>
+                        <a href="/methods/sor/" class="btn btn-primary">Ir al método</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

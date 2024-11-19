@@ -8,6 +8,11 @@ from services.cap1.secant_method import secant_method
 from services.cap2.gauss_seidel_method import gauss_seidel_method
 from services.cap2.jacobi_method import jacobi_method
 from services.cap2.sor_method import sor_method
+from services.cap3.lagrange_method import lagrange
+from services.cap3.newton_interpolation import newton_interpolation
+from services.cap3.spline_cubic_method import spline_cubic
+from services.cap3.spline_lineal_method import spline_lineal
+from services.cap3.vandermonde_method import vandermonde_method
 import numpy as np
 import os
 from sympy import symbols, diff, sympify
@@ -228,6 +233,10 @@ def cap1():
 def cap2():
     return render_template('cap2.html')
 
+@app.route('/cap3', methods=['GET'])
+def cap3():
+    return render_template('cap3.html')
+
 @app.route('/derivative/', methods=['GET', 'POST'])
 def derivative():
     result = None
@@ -348,7 +357,7 @@ def jacobi():
                 convergence_message=convergence_message
             )
         except Exception as e:
-            return render_template("gauss_seidel.html", input_error=True)
+            return render_template("jacobi.html", input_error=True)
     # En caso de método GET, solo renderizar la página inicial
     return render_template('jacobi.html')
 
@@ -399,9 +408,43 @@ def sor():
                 convergence_message=convergence_message
             )
         except Exception as e:
-            return render_template("gauss_seidel.html", input_error=True)
+            return render_template("sor.html", input_error=True)
     # En caso de método GET, solo renderizar la página inicial
     return render_template('sor.html')
+
+@app.route('/methods/vandermonde/', methods=['GET', 'POST'])
+def vandermonde():
+    if request.method == 'POST':
+        try:
+            # Obtener los datos del formulario
+            x = np.array([float(num) for num in request.form['vectorX'].split(',')])
+            y = np.array([float(num) for num in request.form['vectorY'].split(',')])
+
+            # Llamar al método de Vandermonde
+            result = vandermonde_method(x, y)
+            if result["error"]:
+                return render_template("vandermonde.html", input_error=True, e=result["error"])
+            # Obtenemos 
+            polinomio = result.get("polinomio") 
+            # Generar las URL de los gráficos principales (error de convergencia)
+            png_url = None
+            html_url = None
+            if result.get("png_path") and result.get("html_path"):
+                png_url = url_for("static", filename=result.get("png_path").replace("static/", ""))
+                html_url = url_for("static", filename=result.get("html_path").replace("static/", ""))
+
+            # Renderizar la plantilla con todos los datos
+            return render_template(
+                "vandermonde.html",
+                result=result,
+                png_path=png_url,
+                html_path=html_url,
+                polinomio=polinomio
+            )
+        except Exception as e:
+            return render_template("vandermonde.html", input_error=True)
+    # En caso de método GET, solo renderizar la página inicial
+    return render_template('vandermonde.html')
 
 if __name__ == '__main__':
     app.run(debug=True)

@@ -1,0 +1,41 @@
+# Entornos virtuales
+venv/
+env/
+*.pyc
+__pycache__/
+
+# Configuración específica del entorno
+instance/
+config.py
+*.env
+
+# Archivos generados por Flask
+*.log
+*.sqlite
+*.db
+
+# Archivos y carpetas relacionadas con IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Archivos de sistema
+.DS_Store
+Thumbs.db
+
+# Archivos de despliegue
+*.tar.gz
+*.zip
+
+# Caché de dependencias y paquetes
+pip-wheel-metadata/
+*.egg-info/
+dist/
+build/
+
+# Carpeta de migraciones (si usas Flask-Migrate)
+migrations/
+
+# Archivos estáticos generados dinámicamente
+static/
