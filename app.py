@@ -42,7 +42,7 @@ def bisection():
                                 html_path=html_url
                 )
         except Exception as e:
-            return render_template("bisection.html", result={"message": "Ingrese todos los valores y bien parcerito"})
+            return render_template("bisection.html", input_error=True)
         # Pass results to template
         return render_template("bisection.html", result=result, 
                                iterations=result.get("iterations"),
@@ -78,7 +78,7 @@ def false_position():
                                 html_path=html_url
                 )
         except Exception as e:
-            return render_template("false_position.html", result={"message": "Ingrese todos los valores y bien parcerito"})
+            return render_template("false_position.html", input_error=True)
 
         # Pass results to template
         return render_template("false_position.html", result=result, 
@@ -113,7 +113,7 @@ def fixed_point():
                 ) 
             # Pass results to template
         except Exception as e:
-            return render_template("fixed_point.html", result={"message": "Ingrese todos los valores y bien parcerito"})
+            return render_template("fixed_point.html", input_error=True)
         else:
             return render_template("fixed_point.html", result=result, 
                                    iterations=result.get("iterations"),
@@ -146,7 +146,7 @@ def multiple_roots():
                                 html_path=html_url
                 ) 
         except Exception as e:
-            return render_template("multiple_roots.html", result={"message": "Ingrese todos los valores y bien parcerito"})
+            return render_template("multiple_roots.html", input_error=True)
 
         return render_template("multiple_roots.html", result=result, 
                                iterations=result.get("iterations"),
@@ -179,7 +179,7 @@ def newton():
                                 html_path=html_url
                 ) 
         except Exception as e:
-            return render_template("newton.html", result={"message": "Ingrese todos los valores y bien parcerito"})
+            return render_template("newton.html", input_error=True)
 
             # Pass results to template
         return render_template("newton.html", result=result, 
@@ -254,48 +254,50 @@ def derivative():
 @app.route('/methods/gauss_seidel/', methods=['GET', 'POST'])
 def gauss_seidel():
     if request.method == 'POST':
-        # Obtener los datos del formulario
-        A = np.array([[float(num) for num in row.split(',')] for row in request.form['matrixA'].split(';')])
-        b = np.array([float(num) for num in request.form['vectorB'].split(',')])
-        x0 = np.array([float(num) for num in request.form['x0'].split(',')])
-        tol = float(request.form['tol'])
-        niter = int(request.form['niter'])
-        et = request.form['error_type']
+        try:
+            # Obtener los datos del formulario
+            A = np.array([[float(num) for num in row.split(',')] for row in request.form['matrixA'].split(';')])
+            b = np.array([float(num) for num in request.form['vectorB'].split(',')])
+            x0 = np.array([float(num) for num in request.form['x0'].split(',')])
+            tol = float(request.form['tol'])
+            niter = int(request.form['niter'])
+            et = request.form['error_type']
 
-        # Llamar al método de Gauss-Seidel
-        result = gauss_seidel_method(A, b, x0, tol, niter, et)
+            # Llamar al método de Gauss-Seidel
+            result = gauss_seidel_method(A, b, x0, tol, niter, et)
 
-        # Determinar si el método converge o no, basado en el radio espectral
-        Re = result.get("Re")
-        convergence_message = "The method converges." if abs(Re) < 1 else "The method does not converge."
+            # Determinar si el método converge o no, basado en el radio espectral
+            Re = result.get("Re")
+            convergence_message = "The method converges." if abs(Re) < 1 else "The method does not converge."
 
-        # Generar las URL de los gráficos principales (error de convergencia)
-        png_url = None
-        html_url = None
-        if result.get("png_path") and result.get("html_path"):
-            png_url = url_for("static", filename=result.get("png_path").replace("static/", ""))
-            html_url = url_for("static", filename=result.get("html_path").replace("static/", ""))
+            # Generar las URL de los gráficos principales (error de convergencia)
+            png_url = None
+            html_url = None
+            if result.get("png_path") and result.get("html_path"):
+                png_url = url_for("static", filename=result.get("png_path").replace("static/", ""))
+                html_url = url_for("static", filename=result.get("html_path").replace("static/", ""))
 
-        # Generar las URL de los gráficos para el sistema de ecuaciones (solo para 2x2)
-        system_plot_html_url = None
-        system_plot_png_url = None
-        if result.get("system_plot_html") and result.get("system_plot_png"):
-            system_plot_html_url = url_for("static", filename=result["system_plot_html"].replace("static/", ""))
-            system_plot_png_url = url_for("static", filename=result["system_plot_png"].replace("static/", ""))
+            # Generar las URL de los gráficos para el sistema de ecuaciones (solo para 2x2)
+            system_plot_html_url = None
+            system_plot_png_url = None
+            if result.get("system_plot_html") and result.get("system_plot_png"):
+                system_plot_html_url = url_for("static", filename=result["system_plot_html"].replace("static/", ""))
+                system_plot_png_url = url_for("static", filename=result["system_plot_png"].replace("static/", ""))
 
-        # Renderizar la plantilla con todos los datos
-        return render_template(
-            "gauss_seidel.html", 
-            result=result["result"], 
-            iterations=result.get("iterations"),
-            png_path=png_url,
-            html_path=html_url,
-            system_plot_html=system_plot_html_url,
-            system_plot_png=system_plot_png_url,
-            Re=Re,
-            convergence_message=convergence_message
-        )
-
+            # Renderizar la plantilla con todos los datos
+            return render_template(
+                "gauss_seidel.html", 
+                result=result["result"], 
+                iterations=result.get("iterations"),
+                png_path=png_url,
+                html_path=html_url,
+                system_plot_html=system_plot_html_url,
+                system_plot_png=system_plot_png_url,
+                Re=Re,
+                convergence_message=convergence_message
+            )
+        except Exception as e:
+            return render_template("gauss_seidel.html", input_error=True)
     # En caso de método GET, solo renderizar la página inicial
     return render_template('gauss_seidel.html')
 

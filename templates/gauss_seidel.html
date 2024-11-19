@@ -2,7 +2,11 @@
 
 {% block title %}Gauss-Seidel Method{% endblock %}
 
+
 {% block content %}
+{% if input_error %}
+{% include "input_alert.html" %}
+{% endif %}
 <div class="container my-5">
     <h1 class="text-center text-primary mb-4">Gauss-Seidel Method</h1>
     <p class="text-center">Solve linear systems iteratively using the Gauss-Seidel Method.</p>
