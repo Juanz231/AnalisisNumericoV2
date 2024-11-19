@@ -1,0 +1,61 @@
+<div class="container mt-5">
+    <div class="alert alert-info" role="alert">
+        <h4 class="alert-heading">Guía para Métodos Iterativos</h4>
+        <p class="mb-3">Sigue estas pautas al ingresar datos para los métodos iterativos Gauss-Seidel, Jacobi, y SOR:</p>
+        
+        <h5 class="mt-4">1. Matriz A</h5>
+        <ul>
+            <li>Debe ser una <strong>matriz cuadrada</strong>. Esto significa que el número de filas y columnas debe ser igual.</li>
+            <li>Los elementos deben ingresarse como filas separadas por punto y coma (<code>;</code>) y números separados por comas (<code>,</code>).</li>
+            <li><strong>Ejemplo:</strong> Para la matriz:
+                <pre>
+                4 -1  0
+                -1  4 -1
+                 0 -1  4
+                </pre>
+                Ingresa: <code>4,-1,0; -1,4,-1; 0,-1,4</code>
+            </li>
+        </ul>
+        
+        <h5 class="mt-4">2. Vector B</h5>
+        <ul>
+            <li>Debe ser un <strong>vector columna</strong> con el mismo número de elementos que filas en la matriz A.</li>
+            <li>Los valores deben ingresarse separados por comas (<code>,</code>).</li>
+            <li><strong>Ejemplo:</strong> Para el vector:
+                <pre>[15, 10, 10]</pre>
+                Ingresa: <code>15,10,10</code>
+            </li>
+        </ul>
+        
+        <h5 class="mt-4">3. Vector Inicial (x0)</h5>
+        <ul>
+            <li>Debe tener el mismo tamaño que el vector B.</li>
+            <li>Se usa como punto de partida para los cálculos iterativos.</li>
+            <li>Los valores deben ingresarse separados por comas (<code>,</code>).</li>
+            <li><strong>Ejemplo:</strong> <code>0,0,0</code> para inicializar todos los valores en 0.</li>
+        </ul>
+
+        <h5 class="mt-4">4. Tolerancia (Tol) y Número Máximo de Iteraciones (Niter)</h5>
+        <ul>
+            <li><strong>Tolerancia:</strong> Un número positivo pequeño (e.g., <code>0.001</code>) que define la precisión del resultado.</li>
+            <li><strong>Iteraciones:</strong> Un entero positivo que define el límite de iteraciones para evitar bucles infinitos.</li>
+        </ul>
+
+        <h5 class="mt-4">5. Tipo de Error</h5>
+        <ul>
+            <li><strong>Error Absoluto:</strong> Se calcula como la diferencia entre iteraciones consecutivas.</li>
+            <li><strong>Error Relativo:</strong> Se calcula como la diferencia relativa entre iteraciones consecutivas.</li>
+        </ul>
+
+        <h5 class="mt-4">Ejemplo Completo</h5>
+        <ul>
+            <li><strong>Matriz A:</strong> <code>4,-1,0; -1,4,-1; 0,-1,4</code></li>
+            <li><strong>Vector B:</strong> <code>15,10,10</code></li>
+            <li><strong>Vector Inicial:</strong> <code>0,0,0</code></li>
+            <li><strong>Tolerancia:</strong> <code>0.001</code></li>
+            <li><strong>Iteraciones:</strong> <code>100</code></li>
+        </ul>
+        
+        <hr>
+    </div>
+</div>

@@ -154,7 +154,6 @@ def multiple_roots():
 
     return render_template('multiple_roots.html')
 
-
 @app.route('/methods/newton/', methods=['GET', 'POST'])
 def newton():
     if request.method == "POST":
@@ -273,7 +272,6 @@ def gauss_seidel():
 
     return render_template('gauss_seidel.html')
 
-
 @app.route('/methods/jacobi/', methods=['GET', 'POST'])
 def jacobi():
     if request.method == 'POST':
@@ -314,7 +312,6 @@ def jacobi():
 
     return render_template('jacobi.html')
 
-
 @app.route('/methods/sor/', methods=['GET', 'POST'])
 def sor():
     if request.method == 'POST':
@@ -351,7 +348,6 @@ def sor():
         )
 
     return render_template('sor.html')
-
 
 if __name__ == '__main__':
     app.run(debug=True)

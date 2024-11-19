@@ -96,4 +96,8 @@
         </div>
     {% endif %}
 </div>
+
+{% if not result %}
+{% include "iterative_methods_alert.html" %}
+{% endif %}
 {% endblock %}
