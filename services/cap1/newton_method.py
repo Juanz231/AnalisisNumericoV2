@@ -32,7 +32,7 @@ def newton_method(x0: float, Tol: float, Niter: int, Fun: str, Fun_prime: str, e
         xi_list.append(x)
         f_xi_list.append(fx)
         error_list.append("N/A")  # No error on
-        while error > Tol and fx != 0 and fpx != 0 and c < Niter:
+        while error > Tol and c < Niter:
             # Newton-Raphson formula
             #
             c += 1
@@ -75,10 +75,10 @@ def newton_method(x0: float, Tol: float, Niter: int, Fun: str, Fun_prime: str, e
             'Error': [str(e) for e in error_list]
         })
 
-        if xi_list[-1] < x0:
-            x_vals = np.linspace(xi_list[-1] - 2, x0 + 2, 1000)
+        if (abs(x0) < 50):
+            x_vals = np.linspace(-50, 50, 1000)
         else:
-            x_vals = np.linspace(x0 - 2, xi_list[-1] + 2, 1000)
+            x_vals = np.linspace(x0 - 50, x0 + 50, 1000)
         f_vals = []
         for x in x_vals:
             f_vals.append(eval(Fun))

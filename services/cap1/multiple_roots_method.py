@@ -77,10 +77,10 @@ def multiple_roots_method(
         })
 
         # Plotting with Matplotlib (PNG)
-        if x_list[-1] < x0:
-            x_vals = np.linspace(x_list[-1] - 2, x0 + 2, 1000)
+        if (abs(X0) < 50):
+            x_vals = np.linspace(-50, 50, 1000)
         else:
-            x_vals = np.linspace(x0 - 2, x_list[-1] + 2, 1000)
+            x_vals = np.linspace(X0 - 50, X0 + 50, 1000)
         f_vals = []
         for x in x_vals:
             f_vals.append(eval(Fun))

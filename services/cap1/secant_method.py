@@ -82,9 +82,7 @@ def secant_method(Xi: float, Xs: float, Tol: float, Niter: int, Fun: str, error_
             })
 
             # Plotting with Matplotlib (PNG)
-            right_bound_df = (Xs / 10) + 10
-            left_bound_df = (Xi / 10) + 10
-            x_vals = np.linspace(min(Xi, Xs) - left_bound_df, max(Xi, Xs) + right_bound_df, 2000)
+            x_vals = np.linspace(Xi - 2, Xs + 2, 1000)
             f_vals = [eval(Fun) for x in x_vals]
 
             plt.figure(figsize=(10, 6))

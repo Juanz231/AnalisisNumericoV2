@@ -77,10 +77,10 @@ def fixedpoint_method(X0: float, Tol: float, Niter: int, Fun: str, GFun: str, er
         })
 
         # Plotting with Matplotlib (PNG)
-        if x_list[-1] < X0:
-            x_vals = np.linspace(x_list[-1] - 2, X0 + 2, 1000)
+        if (abs(X0) < 50):
+            x_vals = np.linspace(-50, 50, 1000)
         else:
-            x_vals = np.linspace(X0 - 2, x_list[-1] + 2, 1000)
+            x_vals = np.linspace(X0 - 50, X0 + 50, 1000)
         f_vals = []
         g_vals = []
         for x in x_vals:
