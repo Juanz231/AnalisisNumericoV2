@@ -46,7 +46,7 @@ def bisection_method(a: float, b: float, Tol: float, Niter: int, Fun: str, error
         f_xm_list.append(fxm)
         error_list.append("N/A")
         
-        while error > Tol and fxm != 0 and c < Niter:
+        while error > Tol and c < Niter:
             # Update interval based on the sign of f(xm)
             if fa * fxm < 0:
                 b = xm

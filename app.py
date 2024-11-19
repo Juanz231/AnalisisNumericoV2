@@ -10,6 +10,7 @@ from services.cap2.jacobi_method import jacobi_method
 from services.cap2.sor_method import sor_method
 import numpy as np
 import os
+from sympy import symbols, diff, sympify
 
 app = Flask(__name__, static_folder="static")
 app.config['UPLOAD_FOLDER'] = 'static/imgs/bisection_method'
@@ -219,6 +220,19 @@ def secant():
         )
     # GET request - show form
     return render_template('secant.html')
+
+@app.route('/derivative/', methods=['GET', 'POST'])
+def derivative():
+    if request.method == 'POST':
+        try:
+            x = symbols('x')  # Define the variable
+            user_function = request.form['function']
+            parsed_function = sympify(user_function)  # Parse the input into a sympy expression
+            derivative = diff(parsed_function, x)  # Compute the derivative
+            return f"The derivative of {user_function} is: {derivative}"
+        except Exception as e:
+            return f"Error: {e}"
+    return render_template('derivative.html')
 
 @app.route('/methods/gauss_seidel/', methods=['GET', 'POST'])
 def gauss_seidel():

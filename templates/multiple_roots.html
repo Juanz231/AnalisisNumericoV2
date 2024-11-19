@@ -4,6 +4,9 @@
 {% block title %}Raices Multiples Method{% endblock %}
 
 {% block content %}
+{% if not result %}
+{% include "alert.html" %}
+{% endif %}
 <div class="container my-5">
     <h1 class="text-center text-primary mb-4">Multiple Roots (Raices multiples) Method</h1>
     <p class="text-center">Raices aproximadas de una función usando el Método de Raices Multiples.</p>
