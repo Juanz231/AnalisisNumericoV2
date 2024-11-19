@@ -4,8 +4,8 @@
 {% block title %}Newton-Raphson Method{% endblock %}
 
 {% block content %}
-{% if not result %}
-{% include "alert.html" %}
+{% if input_error %}
+{% include "input_alert.html" %}
 {% endif %}
 <div class="container my-5">
     <h1 class="text-center text-primary mb-4">Newton-Raphson (Newton) Method</h1>
@@ -63,6 +63,9 @@
           </div>
       </div>
     </div>
+    {% endif %}
+    {% if not result %}
+    {% include "alert.html" %}
     {% endif %}
        
     {% if result %}

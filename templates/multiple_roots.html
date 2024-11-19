@@ -4,8 +4,8 @@
 {% block title %}Raices Multiples Method{% endblock %}
 
 {% block content %}
-{% if not result %}
-{% include "alert.html" %}
+{% if input_error %}
+{% include "input_alert.html" %}
 {% endif %}
 <div class="container my-5">
     <h1 class="text-center text-primary mb-4">Multiple Roots (Raices multiples) Method</h1>
@@ -68,6 +68,9 @@
           </div>
       </div>
     </div>
+    {% if not result %}
+    {% include "alert.html" %}
+    {% endif %}
     {% endif %}
     {% if result %}
         <div class="mt-5">
