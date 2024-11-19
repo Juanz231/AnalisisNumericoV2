@@ -6,7 +6,8 @@ import plotly.graph_objects as go
 
 def jacobi_method(A, b, x0, tol, niter, et, png_filename="static/imgs/jacobi_method/jacobi_plot.png", html_filename="static/imgs/jacobi_method/jacobi_plot.html"):
     os.makedirs(os.path.dirname(png_filename), exist_ok=True)
-
+    system_plot_paths = None 
+    
     n = len(b)
     c = 0
     error = tol + 1

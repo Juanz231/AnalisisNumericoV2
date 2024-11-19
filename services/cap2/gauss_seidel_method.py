@@ -7,6 +7,7 @@ import plotly.graph_objects as go
 def gauss_seidel_method(A, b, x0, tol, niter, et, png_filename="static/imgs/gauss_seidel_method/gauss_seidel_plot.png", html_filename="static/imgs/gauss_seidel_method/gauss_seidel_plot.html"):
     # Asegurar que las carpetas existen para guardar las imágenes
     os.makedirs(os.path.dirname(png_filename), exist_ok=True)
+    system_plot_paths = None  # Inicializar como None, lo que indica que no hay gráfico de sistema por defecto
 
     # Inicialización de variables
     n = len(b)
@@ -87,7 +88,7 @@ def gauss_seidel_method(A, b, x0, tol, niter, et, png_filename="static/imgs/gaus
 
     # Si el sistema tiene 2 ecuaciones, generar gráfico para visualizar
     if n == 2:
-        system_plot_paths = _plot_system(A, b, x1)
+        system_plot_paths = _plot_system(A, b, x1)  # Solo se genera el gráfico del sistema si el sistema tiene 2 ecuaciones
 
     # Retornar resultados
     return {
@@ -95,8 +96,8 @@ def gauss_seidel_method(A, b, x0, tol, niter, et, png_filename="static/imgs/gaus
         "iterations": resultados.to_dict(orient='records'),
         "png_path": png_filename,
         "html_path": html_filename,
-        "system_plot_html": system_plot_paths["html"] if system_plot_paths else None,
-        "system_plot_png": system_plot_paths["png"] if system_plot_paths else None,
+        "system_plot_html": system_plot_paths["html"] if system_plot_paths else None,  # Solo pasa los valores si existe el gráfico
+        "system_plot_png": system_plot_paths["png"] if system_plot_paths else None,  # Solo pasa los valores si existe el gráfico
         "converge_msg": converge_msg,
         "Re": Re
     }
