@@ -81,7 +81,7 @@ def sor_method(A, b, x0, tol, niter, w, et, png_filename="static/imgs/sor_method
 
     # Si el sistema es de 2 ecuaciones, visualizar la gráfica de las ecuaciones
     if n == 2:
-        _plot_system(A, b, x1)
+        system_plot_paths = _plot_system(A, b, x1)
 
     # Devolver el resultado, tabla y las rutas de los archivos generados
     return {
@@ -89,6 +89,8 @@ def sor_method(A, b, x0, tol, niter, w, et, png_filename="static/imgs/sor_method
         "iterations": table.to_dict(orient='records'),
         "png_path": png_filename,
         "html_path": html_filename,
+        "system_plot_html": system_plot_paths["html"] if system_plot_paths else None,
+        "system_plot_png": system_plot_paths["png"] if system_plot_paths else None,
         "converge_msg": converge_msg,
         "Re": Re
     }
@@ -131,6 +133,7 @@ def _plot_system(A, b, solution, png_filename="static/imgs/sor_method/system_plo
         template='plotly_white'
     )
     fig.write_html(html_filename)
+    return {"png": png_filename, "html": html_filename}
 
 # # Ejemplo de uso de la función:
 # A = np.array([[4, -1], [-1, 4]], dtype=float)
