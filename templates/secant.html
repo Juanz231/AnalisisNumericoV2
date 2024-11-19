@@ -7,6 +7,9 @@
 {% if not result %}
 {% include "alert.html" %}
 {% endif %}
+{% if input_error %}
+{% include "input_alert.html" %}
+{% endif %}
 <div class="container my-5">
     <h1 class="text-center text-primary mb-4">Secant (Secante) Method</h1>
     <p class="text-center">Raices aproximadas de una función usando el Método de la Secante.</p>

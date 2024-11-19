@@ -212,7 +212,7 @@ def secant():
                 ) 
             # Pass results to template
         except Exception as e:
-            return render_template("secant.html", result={"message": "Ingrese todos los valores y bien parcerito"})
+            return render_template("secant.html", input_error=True)
 
         return render_template("secant.html", result=result, 
                                iterations=result.get("iterations"),
