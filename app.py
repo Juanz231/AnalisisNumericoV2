@@ -251,26 +251,36 @@ def gauss_seidel():
         Re = result.get("Re")
         convergence_message = "The method converges." if abs(Re) < 1 else "The method does not converge."
 
-        # Generar las URL de los gráficos
+        # Generar las URL de los gráficos principales (error de convergencia)
+        png_url = None
+        html_url = None
         if result.get("png_path") and result.get("html_path"):
             png_url = url_for("static", filename=result.get("png_path").replace("static/", ""))
             html_url = url_for("static", filename=result.get("html_path").replace("static/", ""))
 
-            return render_template("gauss_seidel.html", result=result["result"], 
-                                   iterations=result.get("iterations"),
-                                   png_path=png_url,
-                                   html_path=html_url,
-                                   Re=Re,
-                                   convergence_message=convergence_message  # Añadir el mensaje de convergencia
-            ) 
-        # Si no se generan gráficos, solo pasar resultados
-        return render_template("gauss_seidel.html", result=result["result"], 
-                               iterations=result.get("iterations"),
-                               Re=Re,
-                               convergence_message=convergence_message,  # Añadir el mensaje de convergencia
+        # Generar las URL de los gráficos para el sistema de ecuaciones (solo para 2x2)
+        system_plot_html_url = None
+        system_plot_png_url = None
+        if result.get("system_plot_html") and result.get("system_plot_png"):
+            system_plot_html_url = url_for("static", filename=result["system_plot_html"].replace("static/", ""))
+            system_plot_png_url = url_for("static", filename=result["system_plot_png"].replace("static/", ""))
+
+        # Renderizar la plantilla con todos los datos
+        return render_template(
+            "gauss_seidel.html", 
+            result=result["result"], 
+            iterations=result.get("iterations"),
+            png_path=png_url,
+            html_path=html_url,
+            system_plot_html=system_plot_html_url,  # Gráfico interactivo del sistema
+            system_plot_png=system_plot_png_url,  # Gráfico PNG del sistema
+            Re=Re,
+            convergence_message=convergence_message
         )
 
+    # En caso de método GET, solo renderizar la página inicial
     return render_template('gauss_seidel.html')
+
 
 @app.route('/methods/jacobi/', methods=['GET', 'POST'])
 def jacobi():

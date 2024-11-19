@@ -87,7 +87,7 @@ def gauss_seidel_method(A, b, x0, tol, niter, et, png_filename="static/imgs/gaus
 
     # Si el sistema tiene 2 ecuaciones, generar gráfico para visualizar
     if n == 2:
-        _plot_system(A, b, x1)
+        system_plot_paths = _plot_system(A, b, x1)
 
     # Retornar resultados
     return {
@@ -95,6 +95,8 @@ def gauss_seidel_method(A, b, x0, tol, niter, et, png_filename="static/imgs/gaus
         "iterations": resultados.to_dict(orient='records'),
         "png_path": png_filename,
         "html_path": html_filename,
+        "system_plot_html": system_plot_paths["html"] if system_plot_paths else None,
+        "system_plot_png": system_plot_paths["png"] if system_plot_paths else None,
         "converge_msg": converge_msg,
         "Re": Re
     }
@@ -137,6 +139,7 @@ def _plot_system(A, b, solution, png_filename="static/imgs/gauss_seidel_method/s
         template='plotly_white'
     )
     fig.write_html(html_filename)
+    return {"png": png_filename, "html": html_filename}
 
 # # Ejemplo de uso:
 # A = np.array([[4, -1], [-1, 4]], dtype=float)
