@@ -305,97 +305,101 @@ def gauss_seidel():
 @app.route('/methods/jacobi/', methods=['GET', 'POST'])
 def jacobi():
     if request.method == 'POST':
-        # Obtener los datos del formulario
-        A = np.array([[float(num) for num in row.split(',')] for row in request.form['matrixA'].split(';')])
-        b = np.array([float(num) for num in request.form['vectorB'].split(',')])
-        x0 = np.array([float(num) for num in request.form['x0'].split(',')])
-        tol = float(request.form['tol'])
-        niter = int(request.form['niter'])
-        et = request.form['error_type']
+        try:
+            # Obtener los datos del formulario
+            A = np.array([[float(num) for num in row.split(',')] for row in request.form['matrixA'].split(';')])
+            b = np.array([float(num) for num in request.form['vectorB'].split(',')])
+            x0 = np.array([float(num) for num in request.form['x0'].split(',')])
+            tol = float(request.form['tol'])
+            niter = int(request.form['niter'])
+            et = request.form['error_type']
 
-        # Llamar al método de Jacobi
-        result = jacobi_method(A, b, x0, tol, niter, et)
+            # Llamar al método de Jacobi
+            result = jacobi_method(A, b, x0, tol, niter, et)
 
-        # Obtener el radio espectral y la convergencia
-        Re = result.get("Re")  # Asumiendo que el método jacobi_method devuelve el radio espectral
-        convergence_message = "El método converge." if abs(Re) < 1 else "El método no converge."
+            # Obtener el radio espectral y la convergencia
+            Re = result.get("Re")  # Asumiendo que el método jacobi_method devuelve el radio espectral
+            convergence_message = "El método converge." if abs(Re) < 1 else "El método no converge."
 
-        # Generar las URL de los gráficos principales (error de convergencia)
-        png_url = None
-        html_url = None
-        if result.get("png_path") and result.get("html_path"):
-            png_url = url_for("static", filename=result.get("png_path").replace("static/", ""))
-            html_url = url_for("static", filename=result.get("html_path").replace("static/", ""))
+            # Generar las URL de los gráficos principales (error de convergencia)
+            png_url = None
+            html_url = None
+            if result.get("png_path") and result.get("html_path"):
+                png_url = url_for("static", filename=result.get("png_path").replace("static/", ""))
+                html_url = url_for("static", filename=result.get("html_path").replace("static/", ""))
 
-        # Generar las URL de los gráficos para el sistema de ecuaciones (solo para 2x2)
-        system_plot_html_url = None
-        system_plot_png_url = None
-        if result.get("system_plot_html") and result.get("system_plot_png"):
-            system_plot_html_url = url_for("static", filename=result["system_plot_html"].replace("static/", ""))
-            system_plot_png_url = url_for("static", filename=result["system_plot_png"].replace("static/", ""))
+            # Generar las URL de los gráficos para el sistema de ecuaciones (solo para 2x2)
+            system_plot_html_url = None
+            system_plot_png_url = None
+            if result.get("system_plot_html") and result.get("system_plot_png"):
+                system_plot_html_url = url_for("static", filename=result["system_plot_html"].replace("static/", ""))
+                system_plot_png_url = url_for("static", filename=result["system_plot_png"].replace("static/", ""))
 
-        # Renderizar la plantilla con todos los datos
-        return render_template(
-            "jacobi.html", 
-            result=result["result"], 
-            iterations=result.get("iterations"),
-            png_path=png_url,
-            html_path=html_url,
-            system_plot_html=system_plot_html_url,
-            system_plot_png=system_plot_png_url,
-            Re=Re,
-            convergence_message=convergence_message
-        )
-
+            # Renderizar la plantilla con todos los datos
+            return render_template(
+                "jacobi.html", 
+                result=result["result"], 
+                iterations=result.get("iterations"),
+                png_path=png_url,
+                html_path=html_url,
+                system_plot_html=system_plot_html_url,
+                system_plot_png=system_plot_png_url,
+                Re=Re,
+                convergence_message=convergence_message
+            )
+        except Exception as e:
+            return render_template("gauss_seidel.html", input_error=True)
     # En caso de método GET, solo renderizar la página inicial
     return render_template('jacobi.html')
 
 @app.route('/methods/sor/', methods=['GET', 'POST'])
 def sor():
     if request.method == 'POST':
-        # Obtener los datos del formulario
-        A = np.array([[float(num) for num in row.split(',')] for row in request.form['matrixA'].split(';')])
-        b = np.array([float(num) for num in request.form['vectorB'].split(',')])
-        x0 = np.array([float(num) for num in request.form['x0'].split(',')])
-        tol = float(request.form['tol'])
-        niter = int(request.form['niter'])
-        et = request.form['error_type']  # Tipo de error
-        w = float(request.form['w'])  # Valor de omega para SOR
+        try:
+            # Obtener los datos del formulario
+            A = np.array([[float(num) for num in row.split(',')] for row in request.form['matrixA'].split(';')])
+            b = np.array([float(num) for num in request.form['vectorB'].split(',')])
+            x0 = np.array([float(num) for num in request.form['x0'].split(',')])
+            tol = float(request.form['tol'])
+            niter = int(request.form['niter'])
+            et = request.form['error_type']  # Tipo de error
+            w = float(request.form['w'])  # Valor de omega para SOR
 
-        # Llamar al método de SOR
-        result = sor_method(A, b, x0, tol, niter, w, et)
+            # Llamar al método de SOR
+            result = sor_method(A, b, x0, tol, niter, w, et)
 
-        # Obtener el radio espectral y la convergencia
-        Re = result.get("Re")  # Asumiendo que el método sor_method devuelve el radio espectral
-        convergence_message = "El método converge." if abs(Re) < 1 else "El método no converge."
+            # Obtener el radio espectral y la convergencia
+            Re = result.get("Re")  # Asumiendo que el método sor_method devuelve el radio espectral
+            convergence_message = "El método converge." if abs(Re) < 1 else "El método no converge."
 
-        # Generar las URL de los gráficos
-        png_url = None
-        html_url = None
-        if result.get("png_path") and result.get("html_path"):
-            png_url = url_for("static", filename=result.get("png_path").replace("static/", ""))
-            html_url = url_for("static", filename=result.get("html_path").replace("static/", ""))
+            # Generar las URL de los gráficos
+            png_url = None
+            html_url = None
+            if result.get("png_path") and result.get("html_path"):
+                png_url = url_for("static", filename=result.get("png_path").replace("static/", ""))
+                html_url = url_for("static", filename=result.get("html_path").replace("static/", ""))
 
-        # Generar las URL de los gráficos para el sistema de ecuaciones (solo para 2x2)
-        system_plot_html_url = None
-        system_plot_png_url = None
-        if result.get("system_plot_html") and result.get("system_plot_png"):
-            system_plot_html_url = url_for("static", filename=result["system_plot_html"].replace("static/", ""))
-            system_plot_png_url = url_for("static", filename=result["system_plot_png"].replace("static/", ""))
+            # Generar las URL de los gráficos para el sistema de ecuaciones (solo para 2x2)
+            system_plot_html_url = None
+            system_plot_png_url = None
+            if result.get("system_plot_html") and result.get("system_plot_png"):
+                system_plot_html_url = url_for("static", filename=result["system_plot_html"].replace("static/", ""))
+                system_plot_png_url = url_for("static", filename=result["system_plot_png"].replace("static/", ""))
 
-        # Renderizar la plantilla con todos los datos
-        return render_template(
-            "sor.html", 
-            result=result["result"], 
-            iterations=result.get("iterations"),
-            png_path=png_url,
-            html_path=html_url,
-            system_plot_html=system_plot_html_url,
-            system_plot_png=system_plot_png_url,
-            Re=Re,
-            convergence_message=convergence_message
-        )
-
+            # Renderizar la plantilla con todos los datos
+            return render_template(
+                "sor.html", 
+                result=result["result"], 
+                iterations=result.get("iterations"),
+                png_path=png_url,
+                html_path=html_url,
+                system_plot_html=system_plot_html_url,
+                system_plot_png=system_plot_png_url,
+                Re=Re,
+                convergence_message=convergence_message
+            )
+        except Exception as e:
+            return render_template("gauss_seidel.html", input_error=True)
     # En caso de método GET, solo renderizar la página inicial
     return render_template('sor.html')
 
