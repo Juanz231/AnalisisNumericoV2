@@ -220,18 +220,32 @@ def secant():
     # GET request - show form
     return render_template('secant.html')
 
+@app.route('/cap1', methods=['GET'])
+def cap1():
+    return render_template('cap1.html')
+
 @app.route('/derivative/', methods=['GET', 'POST'])
 def derivative():
+    result = None
     if request.method == 'POST':
+        function_input = request.form.get('function')
+        variable_input = request.form.get('variable', 'x')
+        
         try:
-            x = symbols('x')  # Define the variable
-            user_function = request.form['function']
-            parsed_function = sympify(user_function)  # Parse the input into a sympy expression
-            derivative = diff(parsed_function, x)  # Compute the derivative
-            return f"The derivative of {user_function} is: {derivative}"
+            variable = symbols(variable_input)
+            function = sympify(function_input)
+            derivative = diff(function, variable)
+            
+            result = {
+                'original_function': function_input,
+                'variable': variable_input,
+                'derivative': str(derivative)
+            }
         except Exception as e:
-            return f"Error: {e}"
-    return render_template('derivative.html')
+            result = {'error': f'Error procesando la función: {e}'}
+    
+    return render_template('derivative.html', result=result)
+
 
 @app.route('/methods/gauss_seidel/', methods=['GET', 'POST'])
 def gauss_seidel():
