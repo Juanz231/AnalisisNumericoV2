@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}Capítulo #2{% endblock %}
+
+{% block content %}
+<section id="cap2" class="py-5">
+    <div class="container">
+        <h2 class="text-center mb-4">Capítulo 2: Métodos Iterativos</h2>
+        
+        <div class="row">
+            <!-- Main Methods -->
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Gauss-Seidel</h5>
+                        <p class="card-text">Método iterativo de Gauss-Seidel para resolver sistemas de ecuaciones lineales.</p>
+                        <a href="/methods/gauss_seidel/" class="btn btn-primary">Ir al método</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Jacobi</h5>
+                        <p class="card-text">Método iterativo de Jacobi para resolver sistemas lineales.</p>
+                        <a href="/methods/jacobi/" class="btn btn-primary">Ir al método</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">SOR</h5>
+                        <p class="card-text">Método de relajación sucesiva (SOR) para la solución de sistemas lineales.</p>
+                        <a href="/methods/sor/" class="btn btn-primary">Ir al método</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

@@ -224,6 +224,10 @@ def secant():
 def cap1():
     return render_template('cap1.html')
 
+@app.route('/cap2', methods=['GET'])
+def cap2():
+    return render_template('cap2.html')
+
 @app.route('/derivative/', methods=['GET', 'POST'])
 def derivative():
     result = None
