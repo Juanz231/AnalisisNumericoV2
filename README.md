@@ -2,6 +2,24 @@
 # Descripción del Proyecto: Página Web para Métodos de Análisis Numérico
 Este proyecto consiste en una página web desarrollada para complementar el aprendizaje de los métodos vistos en la clase de Análisis Numérico. Está diseñada para proporcionar herramientas interactivas y explicaciones detalladas para cada método, ayudando a los estudiantes a comprender y aplicar los conceptos teóricos de forma práctica. La página está organizada en 3 capítulos que agrupan los métodos según sus categorías. Además, incluye una sección que presenta todos los métodos disponibles.
 
+# Como ejecutar:
+
+Clone el repositorio
+
+    git clone https://github.com/Juanz231/AnalisisNumericoV2.git
+
+Instale las dependencias
+
+    pip install -r requirements.txt
+
+Ejecute la aplicación
+
+    Python app.py
+
+Abra la pagina en su navegador
+
+    http://127.0.0.1:5000
+
 # Estructura de la Página
 ## Capítulos
 ### Capítulo 1: Métodos de Raíces
