@@ -58,7 +58,17 @@
             </div>
         </div>
     </form>
-
+    {% if not result %}
+    <div class="col-md-4">
+      <div class="card">
+          <div class="card-body">
+              <h5 class="card-title">Calculadora de derivadas</h5>
+              <p class="card-text">¿No tienes la derivada escrita? Usa nuestra calculadora de derivadas.</p>
+              <a href="/derivative/" class="btn btn-primary">Ir a la calculadora</a>
+          </div>
+      </div>
+    </div>
+    {% endif %}
     {% if result %}
         <div class="mt-5">
             <h2 class="text-success">Result</h2>

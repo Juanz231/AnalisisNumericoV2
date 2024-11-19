@@ -1,17 +1,62 @@
+{% extends 'base.html' %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Derivative Calculator</title>
-</head>
-<body>
-    <h1>Derivative Calculator</h1>
-    <form  method="post">
-        <label for="function">Enter a function (use 'x' as the variable):</label><br>
-        <input type="text" id="function" name="function" placeholder="e.g., np.exp(-x)" required>
-        <button type="submit">Compute Derivative</button>
+{% block title %}Derivative Calculator{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="alert alert-info" role="alert">
+        <h4 class="alert-heading">Cómo Ingresar Funciones</h4>
+        <p class="mb-3">Para garantizar un cálculo correcto, sigue estas pautas al ingresar funciones matemáticas:</p>
+        <ul>
+            <li><strong>Exponencial:</strong> Usa <code>exp(x)</code> para <em>e<sup>x</sup></em></li>
+            <li><strong>Logaritmo Natural:</strong> Usa <code>log(x)</code> para <em>ln(x)</em></li>
+            <li><strong>Potencias:</strong> Usa <code>x**n</code> para <em>x<sup>n</sup></em> (e.g., <code>x**2</code> para <em>x²</em>)</li>
+            <li><strong>Funciones Trigonométricas:</strong> Usa <code>sin(x)</code>, <code>cos(x)</code>, y <code>tan(x)</code> para seno, coseno y tangente</li>
+            <li><strong>Raíz Cuadrada:</strong> Usa <code>sqrt(x)</code> para <em>√x</em></li>
+            <li><strong>Valor Absoluto:</strong> Usa <code>abs(x)</code> para <em>|x|</em></li>
+            <li><strong>Constantes:</strong>
+                <ul>
+                    <li><code>pi</code> para <em>π</em></li>
+                    <li><code>e</code> para <em>e</em></li>
+                </ul>
+            </li>
+        </ul>
+        <hr>
+        <p class="mb-2"><strong>Ejemplos de Entradas:</strong></p>
+        <ul>
+            <li>Para <em>f(x) = e<sup>-x</sup></em>, ingresa: <code>exp(-x)</code></li>
+            <li>Para <em>f(x) = ln(x²)</em>, ingresa: <code>log(x**2)</code></li>
+        </ul>
+    </div>
+</div>
+<div class="container my-5">
+    <h1 class="text-center text-primary mb-4">Derivative Calculator</h1>
+    <p class="text-center">Calcula la derivada de una función algebraica usando Sympy.</p>
+    <form method="POST" class="needs-validation" novalidate>
+        <div class="row">
+            <div class="col-md-12 mb-3">
+                <label for="function" class="form-label">Función:</label>
+                <input type="text" id="function" name="function" class="form-control" placeholder="e.g., 'x**2 + 3*x - 5'" required>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="variable" class="form-label">Variable (opcional, por defecto 'x'):</label>
+                <input type="text" id="variable" name="variable" class="form-control" placeholder="e.g., 'x'">
+            </div>
+            <div class="col-md-6 d-flex align-items-end">
+                <button type="submit" class="btn btn-primary w-100">Calcular Derivada</button>
+            </div>
+        </div>
     </form>
-</body>
-</html>
+
+    {% if result %}
+        <div class="mt-5">
+            <h2 class="text-success">Resultado</h2>
+            <p>La derivada de <strong>{{ result['original_function'] }}</strong> respecto a <strong>{{ result['variable'] }}</strong> es:</p>
+            <p class="text-primary"><strong>{{ result['derivative'] }}</strong></p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
+

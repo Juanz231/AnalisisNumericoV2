@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+{% block title %}Capitulo #1{% endblock %}
+
+{% block content %}
+<section id="cap1" class="py-5">
+<div class="container">
+        <h2 class="text-center mb-4">Capítulo 1: Métodos de Raíces</h2>
+        <div class="row">
+            <!-- Main Methods -->
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Bisección</h5>
+                        <p class="card-text">Método de bisección para encontrar raíces.</p>
+                        <a href="/methods/bisection/" class="btn btn-primary">Ir al método</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Regla falsa</h5>
+                        <p class="card-text">Método de Regla falsa para aproximar raíces.</p>
+                        <a href="/methods/false_position/" class="btn btn-primary">Ir al método</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Punto Fijo</h5>
+                        <p class="card-text">Método de punto fijo para soluciones iterativas.</p>
+                        <a href="/methods/fixed_point/" class="btn btn-primary">Ir al método</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Show More Methods -->
+        <div class="collapse" id="more-methods">
+            <div class="row mt-4">
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Raíces Múltiples</h5>
+                            <p class="card-text">Método para encontrar raíces múltiples.</p>
+                            <a href="/methods/multiple_roots/" class="btn btn-primary">Ir al método</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Newton</h5>
+                            <p class="card-text">Método de Newton para raíces rápidas.</p>
+                            <a href="/methods/newton/" class="btn btn-primary">Ir al método</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Secante</h5>
+                            <p class="card-text">Método de la secante para aproximaciones.</p>
+                            <a href="/methods/secant/" class="btn btn-primary">Ir al método</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Show More Button -->
+        <div class="text-center mt-4">
+            <button class="btn btn-outline-primary" type="button" data-bs-toggle="collapse" data-bs-target="#more-methods" aria-expanded="false" aria-controls="more-methods">
+                Más Métodos
+            </button>
+        </div>
+    </div>
+  </section>
+{% endblock %}
+
