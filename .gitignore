@@ -37,5 +37,3 @@ build/
 # Carpeta de migraciones (si usas Flask-Migrate)
 migrations/
 
-# Archivos estáticos generados dinámicamente
-static/
