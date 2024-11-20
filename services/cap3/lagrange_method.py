@@ -9,7 +9,7 @@ def lagrange_method(vectorx, vectory,png_filename: str = "static/imgs/lagrange_m
     if len(vectorx)>8:
         return {"error": "El numero maximo de datos es 8"}
     if len(np.unique(vectorx)) != len(vectorx):
-                return {"error": "El vector X no puede contener valores duplicados."}
+        return {"error": "El vector X no puede contener valores duplicados."}
     xv = np.array(vectorx, dtype=float)
     yv = np.array(vectory, dtype=float)
     n = len(xv)
@@ -52,8 +52,8 @@ def lagrange_method(vectorx, vectory,png_filename: str = "static/imgs/lagrange_m
     pol_text = "".join(polynomial_terms).replace("+-", "-")
 
     # Mostrar el polinomio
-    print("Polinomio de Lagrange (coeficientes):")
-    print(pol)
+    #print("Polinomio de Lagrange (coeficientes):")
+    #print(pol)
     
     # Crear un conjunto de puntos para graficar el polinomio
     x_vals = np.linspace(min(xv), max(xv), 1000)
