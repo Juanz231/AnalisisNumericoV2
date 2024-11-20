@@ -5,8 +5,19 @@ import plotly.graph_objects as go
 def spline_lineal(vectorx, vectory, png_filename: str = "static/imgs/spline_lineal_method/spline_lineal_plot.png", html_filename: str = "static/imgs/spline_lineal_method/spline_lineal_plot.html"):
     if len(vectorx) != len(vectory):
         return {"error": "Los vectores x e y deben tener la misma longitud."}
+    #Verificar que no hayan mas de 8 datos
+    if len(vectorx)>8:
+        return {"error": "El numero maximo de datos es 8"}
+    if len(np.unique(vectorx)) != len(vectorx):
+                return {"error": "El vector X no puede contener valores duplicados."}
     x = np.array(vectorx, dtype=float)
     y = np.array(vectory, dtype=float)
+    
+    # Ordenar los puntos por los valores de x
+    sorted_indices = np.argsort(x)
+    x = x[sorted_indices]
+    y = y[sorted_indices]
+    
     n = len(x)
     
     # Verificar que hay suficientes puntos

@@ -4,10 +4,15 @@ import plotly.graph_objects as go
 
 
 def vandermonde_method(vectorx, vectory, png_filename: str = "static/imgs/vandermonde_method/vandermonde_plot.png", html_filename: str = "static/imgs/vandermonde_method/vandermonde_plot.html"):
-    try:
+    try: 
         # Verificar que los vectores tienen la misma longitud
         if len(vectorx) != len(vectory):
             return {"error": "Los vectores x e y deben tener la misma longitud."}
+        #Verificar que no hayan mas de 8 datos
+        if len(vectorx)>8:
+            return {"error": "El numero maximo de datos es 8"}
+        if len(np.unique(vectorx)) != len(vectorx):
+                return {"error": "El vector X no puede contener valores duplicados."}
 
         # Asignar los vectores de entrada
         xv = np.array(vectorx, dtype=float)

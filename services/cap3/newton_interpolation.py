@@ -1,11 +1,17 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import plotly.graph_objects as go
+import sympy as sp
 
 def newton_interpolation_method(x, y, png_filename: str = "static/imgs/newton_int_method/newton_int_plot.png", html_filename: str = "static/imgs/newton_int_method/newton_int_plot.html"):
     
     if len(x) != len(y):
         return {"error": "Los vectores x e y deben tener la misma longitud."}
+    #Verificar que no hayan mas de 8 datos
+    if len(x)>8:
+        return {"error": "El numero maximo de datos es 8"}
+    if len(np.unique(x)) != len(y):
+                return {"error": "El vector X no puede contener valores duplicados."}
         
     # Convertir x e y a arrays numéricos
     x = np.array(x, dtype=float)
@@ -27,28 +33,25 @@ def newton_interpolation_method(x, y, png_filename: str = "static/imgs/newton_in
     coef = np.diag(Tabla, k=1)
     
     # Construir el polinomio de interpolación
-    pol = [coef[0]]
-    acum = [1]
-    pol_text = f"{coef[0]:.4f}"  # Empezamos con el primer coeficiente en formato de texto
+    x_symbol = sp.symbols("x")
     
+    # Construir el polinomio simbólico
+    polynomial = coef[0]
+    term = 1  # Inicializar el término acumulativo
+    
+    pol = np.array([coef[0]])
+    acum = np.array([1])
+
     for i in range(1, n):
-        pol = np.append([0], pol)
-        acum = np.convolve(acum, [1, -x[i - 1]])
+        term *= (x_symbol - x[i - 1])  # Termino acumulativo (x - x[i-1])
+        polynomial += coef[i] * term  # Sumar el término al polinomio
+
+        pol = np.append([0], pol)  # Shift de coeficientes
+        acum = np.convolve(acum, [1, -x[i - 1]])  # Multiplicar acumulador
         pol = pol + coef[i] * acum
-        
-        # Concatenar el término correspondiente en el polinomio como texto
-        term = f"({coef[i]:.4f})"
-        for j in range(len(acum) - 1):
-            term += f"(x - {x[i - 1]:.4f})"
-        pol_text += " + " + term
-    
-    # Mostrar la tabla de diferencias divididas
-    print("Tabla de diferencias divididas de Newton:")
-    print(Tabla)
-    
-    # Mostrar el polinomio de interpolación
-    print("Polinomio de interpolación:")
-    print(pol_text)
+
+    # Simplificar el polinomio
+    pol_text = sp.simplify(polynomial)
 
     # Generar valores de x para graficar
     xpol = np.linspace(min(x), max(x), 1000)
@@ -93,3 +96,4 @@ def newton_interpolation_method(x, y, png_filename: str = "static/imgs/newton_in
         "png_path": png_filename,
         "html_path": html_filename
     }
+

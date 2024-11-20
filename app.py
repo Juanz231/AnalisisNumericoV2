@@ -417,8 +417,11 @@ def vandermonde():
     if request.method == 'POST':
         try:
             # Obtener los datos del formulario
-            x = np.array([float(num) for num in request.form['vectorX'].split(',')])
-            y = np.array([float(num) for num in request.form['vectorY'].split(',')])
+            if request.form['vectorX'] and request.form['vectorY']:
+                x = np.array([float(num) for num in request.form['vectorX'].split(',')])
+                y = np.array([float(num) for num in request.form['vectorY'].split(',')])
+            else:
+                return render_template("vandermonde.html", input_error=True, e="Los vectores X e Y no pueden estar vacíos.")
 
             # Llamar al método de Vandermonde
             result = vandermonde_method(x, y)
@@ -451,8 +454,11 @@ def newton_int():
     if request.method == 'POST':
         try:
             # Obtener los datos del formulario
-            x = np.array([float(num) for num in request.form['vectorX'].split(',')])
-            y = np.array([float(num) for num in request.form['vectorY'].split(',')])
+            if request.form['vectorX'] and request.form['vectorY']:
+                x = np.array([float(num) for num in request.form['vectorX'].split(',')])
+                y = np.array([float(num) for num in request.form['vectorY'].split(',')])
+            else:
+                return render_template("newton_int.html", input_error=True, e="Los vectores X e Y no pueden estar vacíos.")
 
             # Llamar al método de Vandermonde
             result = newton_interpolation_method(x, y)
@@ -485,9 +491,12 @@ def lagrange():
     if request.method == 'POST':
         try:
             # Obtener los datos del formulario
-            x = np.array([float(num) for num in request.form['vectorX'].split(',')])
-            y = np.array([float(num) for num in request.form['vectorY'].split(',')])
-
+            if request.form['vectorX'] and request.form['vectorY']:
+                x = np.array([float(num) for num in request.form['vectorX'].split(',')])
+                y = np.array([float(num) for num in request.form['vectorY'].split(',')])
+            else:
+                return render_template("lagrange.html", input_error=True, e="Los vectores X e Y no pueden estar vacíos.")
+            
             # Llamar al método de Vandermonde
             result = lagrange_method(x, y)
             if result.get("error"):
@@ -519,8 +528,12 @@ def spline():
     if request.method == 'POST':
         try:
             # Obtener los datos del formulario
-            x = np.array([float(num) for num in request.form['vectorX'].split(',')])
-            y = np.array([float(num) for num in request.form['vectorY'].split(',')])
+            if request.form['vectorX'] and request.form['vectorY']:
+                x = np.array([float(num) for num in request.form['vectorX'].split(',')])
+                y = np.array([float(num) for num in request.form['vectorY'].split(',')])
+            else:
+                return render_template("spline.html", input_error=True, e="Los vectores X e Y no pueden estar vacíos.")
+            
             if request.form.get("spline_type")== "Lineal":
                 result = spline_lineal(x, y)
             else:
