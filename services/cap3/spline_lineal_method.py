@@ -3,6 +3,8 @@ import matplotlib.pyplot as plt
 import plotly.graph_objects as go
 
 def spline_lineal(vectorx, vectory, png_filename: str = "static/imgs/spline_lineal_method/spline_lineal_plot.png", html_filename: str = "static/imgs/spline_lineal_method/spline_lineal_plot.html"):
+    if len(vectorx) != len(vectory):
+        return {"error": "Los vectores x e y deben tener la misma longitud."}
     x = np.array(vectorx, dtype=float)
     y = np.array(vectory, dtype=float)
     n = len(x)
@@ -10,10 +12,7 @@ def spline_lineal(vectorx, vectory, png_filename: str = "static/imgs/spline_line
     # Verificar que hay suficientes puntos
     if n < 2:
         return {
-            "message": "Se necesitan al menos 2 puntos para calcular un spline lineal.",
-            "successful": False,
-            "segments": [],
-            "equations": [],
+            "error": "Se necesitan al menos 2 puntos para calcular un spline lineal.",
         }
     
     segments = []
@@ -68,9 +67,7 @@ def spline_lineal(vectorx, vectory, png_filename: str = "static/imgs/spline_line
     fig.write_html(html_filename)
     
     return {
-        "message": "Spline lineal calculado con éxito.",
-        "successful": True,
-        "segments": segments,
-        "equations": equations,
+        "polinomio": equations,
+        "png_path": png_filename,
+        "html_path": html_filename
     }
-

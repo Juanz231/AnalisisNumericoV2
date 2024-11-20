@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Método de Vandermonde{% endblock %}
+{% block title %}Método de Newton Interpolación{% endblock %}
 
 {% block content %}
 {% if input_error %}
@@ -10,8 +10,8 @@
 </div>
 {% endif %}
 <div class="container my-5">
-    <h1 class="text-center text-primary mb-4">Método de Vandermonde</h1>
-    <p class="text-center">Método de Vandermonde para obtener el polinomio interpolante mediante matrices.</p>
+    <h1 class="text-center text-primary mb-4">Método de Newton</h1>
+    <p class="text-center">Método de Newton para obtener el polinomio interpolante usando diferencias divididas</p>
     <form method="POST" class="needs-validation" novalidate>
         <div class="row">
             <div class="col-md-6 mb-3">
@@ -33,7 +33,7 @@
 
     {% if result %}
     <div class="mt-5">
-        <h2 class="text-success">Polinomio usando matriz de Vandermonde</h2>
+        <h2 class="text-success">Polinomio de Interpolación</h2>
         <p>{{ polinomio }}</p>
 
         <!-- Gráficos en una fila -->
