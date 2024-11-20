@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Método de Vandermonde{% endblock %}
+{% block title %}Método Spline(Cubico o lineal){% endblock %}
 
 {% block content %}
 {% if input_error %}
@@ -10,8 +10,8 @@
 </div>
 {% endif %}
 <div class="container my-5">
-    <h1 class="text-center text-primary mb-4">Método de Vandermonde</h1>
-    <p class="text-center">Método de Vandermonde para obtener el polinomio interpolante mediante matrices.</p>
+    <h1 class="text-center text-primary mb-4">Método Spline(Cúbico o Lineal)</h1>
+    <p class="text-center">Método de interpolación que utiliza diferentes polinomios para aproximar una función en varios tramos definidos por puntos específicos</p>
     <form method="POST" class="needs-validation" novalidate>
         <div class="row">
             <div class="col-md-6 mb-3">
@@ -25,6 +25,14 @@
         </div>
         
         <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="spline-type" class="form-label">Tipo de Spline:</label>
+                <div class="form-check form-switch">
+                    <input type="hidden" name="spline_type" id="hidden-spline-type" value="Cubico">
+                    <input class="form-check-input" type="checkbox" id="spline-type">
+                    <label class="form-check-label" for="spline-type" id="spline-label">Cubico</label>
+                </div>
+            </div>
             <div class="col-md-6 d-flex align-items-end">
                 <button type="submit" class="btn btn-primary w-100">Calcular</button>
             </div>
@@ -33,8 +41,14 @@
 
     {% if result %}
     <div class="mt-5">
-        <h2 class="text-success">Polinomio usando matriz de Vandermonde</h2>
-        <p>{{ polinomio }}</p>
+        <div>
+            <h5>Polinomios por Tramos:</h5>
+            <ul>
+                {% for poli in polinomio %}
+                    <li>{{ poli }}</li>
+                {% endfor %}
+            </ul>
+        </div>
 
         <!-- Gráficos en una fila -->
         <div class="row mt-4">
@@ -64,4 +78,21 @@
 {% if not result %}
 {% include "interpolation_methods_alert.html" %}
 {% endif %}
+<script>
+    const splineSwitch = document.getElementById("spline-type");
+    const hiddenSplineType = document.getElementById("hidden-spline-type");
+    const splineLabel = document.getElementById("spline-label");
+
+    splineSwitch.addEventListener("change", () => {
+        if (splineSwitch.checked) {
+            hiddenSplineType.value = "Lineal";
+            splineLabel.textContent = "Lineal";
+        } else {
+            hiddenSplineType.value = "Cubico";
+            splineLabel.textContent = "Cubico";
+        }
+    });
+</script>
 {% endblock %}
+
+

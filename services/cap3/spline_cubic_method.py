@@ -4,15 +4,20 @@ from scipy.interpolate import CubicSpline
 import plotly.graph_objects as go
 
 def spline_cubic(vectorx, vectory, png_filename: str = "static/imgs/spline_cubic_method/spline_cubic_plot.png", html_filename: str = "static/imgs/spline_cubic_method/spline_cubic_plot.html"):
+    if len(vectorx) != len(vectory):
+        return {"error": "Los vectores x e y deben tener la misma longitud."}
+    #Verificar que no hayan mas de 8 datos
+    if len(vectorx)>8:
+        return {"error": "El numero maximo de datos es 8"}
+    if len(np.unique(vectorx)) != len(vectorx):
+                return {"error": "El vector X no puede contener valores duplicados."}
     x = np.array(vectorx, dtype=float)
     y = np.array(vectory, dtype=float)
 
     # Verificar que hay suficientes puntos
     if len(x) < 3:
         return {
-            "message": "Se necesitan al menos 3 puntos para calcular un spline cúbico.",
-            "successful": False,
-            "tramos": [],
+            "error": "Se necesitan al menos 3 puntos para calcular un spline cúbico."
         }
 
     # Ordenar los puntos por los valores de x
@@ -26,7 +31,7 @@ def spline_cubic(vectorx, vectory, png_filename: str = "static/imgs/spline_cubic
     # Obtener los coeficientes del spline por tramos
     coefs = cs.c.T  # Cada fila contiene los coeficientes de un tramo
     tramos = []
-    for i in range(len(coefs) - 1):
+    for i in range(len(coefs)):
         tramo = (
             f"{coefs[i, 3]:.4f}*(x - {x[i]:.4f})^3 + {coefs[i, 2]:.4f}*(x - {x[i]:.4f})^2 "
             f"+ {coefs[i, 1]:.4f}*(x - {x[i]:.4f}) + {coefs[i, 0]:.4f}"
@@ -68,9 +73,7 @@ def spline_cubic(vectorx, vectory, png_filename: str = "static/imgs/spline_cubic
     fig.write_html(html_filename)
 
     return {
-        "message": "Spline cúbico calculado con éxito.",
-        "successful": True,
-        "tramos": tramos,
+        "polinomio": tramos,
+        "png_path": png_filename,
+        "html_path": html_filename
     }
-
-

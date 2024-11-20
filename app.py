@@ -8,8 +8,8 @@ from services.cap1.secant_method import secant_method
 from services.cap2.gauss_seidel_method import gauss_seidel_method
 from services.cap2.jacobi_method import jacobi_method
 from services.cap2.sor_method import sor_method
-from services.cap3.lagrange_method import lagrange
-from services.cap3.newton_interpolation import newton_interpolation
+from services.cap3.lagrange_method import lagrange_method
+from services.cap3.newton_interpolation import newton_interpolation_method
 from services.cap3.spline_cubic_method import spline_cubic
 from services.cap3.spline_lineal_method import spline_lineal
 from services.cap3.vandermonde_method import vandermonde_method
@@ -417,12 +417,15 @@ def vandermonde():
     if request.method == 'POST':
         try:
             # Obtener los datos del formulario
-            x = np.array([float(num) for num in request.form['vectorX'].split(',')])
-            y = np.array([float(num) for num in request.form['vectorY'].split(',')])
+            if request.form['vectorX'] and request.form['vectorY']:
+                x = np.array([float(num) for num in request.form['vectorX'].split(',')])
+                y = np.array([float(num) for num in request.form['vectorY'].split(',')])
+            else:
+                return render_template("vandermonde.html", input_error=True, e="Los vectores X e Y no pueden estar vacíos.")
 
             # Llamar al método de Vandermonde
             result = vandermonde_method(x, y)
-            if result["error"]:
+            if result.get("error"):
                 return render_template("vandermonde.html", input_error=True, e=result["error"])
             # Obtenemos 
             polinomio = result.get("polinomio") 
@@ -445,6 +448,120 @@ def vandermonde():
             return render_template("vandermonde.html", input_error=True)
     # En caso de método GET, solo renderizar la página inicial
     return render_template('vandermonde.html')
+
+@app.route('/methods/newton_int/', methods=['GET', 'POST'])
+def newton_int():
+    if request.method == 'POST':
+        try:
+            # Obtener los datos del formulario
+            if request.form['vectorX'] and request.form['vectorY']:
+                x = np.array([float(num) for num in request.form['vectorX'].split(',')])
+                y = np.array([float(num) for num in request.form['vectorY'].split(',')])
+            else:
+                return render_template("newton_int.html", input_error=True, e="Los vectores X e Y no pueden estar vacíos.")
+
+            # Llamar al método de Vandermonde
+            result = newton_interpolation_method(x, y)
+            if result.get("error"):
+                return render_template("newton_int.html", input_error=True, e=result["error"])
+            # Obtenemos 
+            polinomio = result.get("polinomio") 
+            # Generar las URL de los gráficos principales (error de convergencia)
+            png_url = None
+            html_url = None
+            if result.get("png_path") and result.get("html_path"):
+                png_url = url_for("static", filename=result.get("png_path").replace("static/", ""))
+                html_url = url_for("static", filename=result.get("html_path").replace("static/", ""))
+
+            # Renderizar la plantilla con todos los datos
+            return render_template(
+                "newton_int.html",
+                result=result,
+                png_path=png_url,
+                html_path=html_url,
+                polinomio=polinomio
+            )
+        except Exception as e:
+            return render_template("newton_int.html", input_error=True)
+    # En caso de método GET, solo renderizar la página inicial
+    return render_template('newton_int.html')
+
+@app.route('/methods/lagrange/', methods=['GET', 'POST'])
+def lagrange():
+    if request.method == 'POST':
+        try:
+            # Obtener los datos del formulario
+            if request.form['vectorX'] and request.form['vectorY']:
+                x = np.array([float(num) for num in request.form['vectorX'].split(',')])
+                y = np.array([float(num) for num in request.form['vectorY'].split(',')])
+            else:
+                return render_template("lagrange.html", input_error=True, e="Los vectores X e Y no pueden estar vacíos.")
+            
+            # Llamar al método de Vandermonde
+            result = lagrange_method(x, y)
+            if result.get("error"):
+                return render_template("lagrange.html", input_error=True, e=result["error"])
+            # Obtenemos 
+            polinomio = result.get("polinomio") 
+            # Generar las URL de los gráficos principales (error de convergencia)
+            png_url = None
+            html_url = None
+            if result.get("png_path") and result.get("html_path"):
+                png_url = url_for("static", filename=result.get("png_path").replace("static/", ""))
+                html_url = url_for("static", filename=result.get("html_path").replace("static/", ""))
+
+            # Renderizar la plantilla con todos los datos
+            return render_template(
+                "lagrange.html",
+                result=result,
+                png_path=png_url,
+                html_path=html_url,
+                polinomio=polinomio
+            )
+        except Exception as e:
+            return render_template("lagrange.html", input_error=True)
+    # En caso de método GET, solo renderizar la página inicial
+    return render_template('lagrange.html')
+
+@app.route('/methods/spline/', methods=['GET', 'POST'])
+def spline():
+    if request.method == 'POST':
+        try:
+            # Obtener los datos del formulario
+            if request.form['vectorX'] and request.form['vectorY']:
+                x = np.array([float(num) for num in request.form['vectorX'].split(',')])
+                y = np.array([float(num) for num in request.form['vectorY'].split(',')])
+            else:
+                return render_template("spline.html", input_error=True, e="Los vectores X e Y no pueden estar vacíos.")
+            
+            if request.form.get("spline_type")== "Lineal":
+                result = spline_lineal(x, y)
+            else:
+                result = spline_cubic(x, y)
+            if result.get("error"):
+                return render_template("spline.html", input_error=True, e=result["error"])
+            # Obtenemos 
+            polinomio = result.get("polinomio") 
+            # Generar las URL de los gráficos principales
+            png_url = None
+            html_url = None
+            if result.get("png_path") and result.get("html_path"):
+                png_url = url_for("static", filename=result.get("png_path").replace("static/", ""))
+                html_url = url_for("static", filename=result.get("html_path").replace("static/", ""))
+
+            # Renderizar la plantilla con todos los datos
+            return render_template(
+                "spline.html",
+                result=result,
+                png_path=png_url,
+                html_path=html_url,
+                polinomio=polinomio
+            )
+        except Exception as e:
+            return render_template("spline.html", input_error=True)
+    # En caso de método GET, solo renderizar la página inicial
+    return render_template('spline.html')
+
 
 if __name__ == '__main__':
     app.run(debug=True)

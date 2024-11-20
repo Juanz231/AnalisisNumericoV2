@@ -3,17 +3,27 @@ import matplotlib.pyplot as plt
 import plotly.graph_objects as go
 
 def spline_lineal(vectorx, vectory, png_filename: str = "static/imgs/spline_lineal_method/spline_lineal_plot.png", html_filename: str = "static/imgs/spline_lineal_method/spline_lineal_plot.html"):
+    if len(vectorx) != len(vectory):
+        return {"error": "Los vectores x e y deben tener la misma longitud."}
+    #Verificar que no hayan mas de 8 datos
+    if len(vectorx)>8:
+        return {"error": "El numero maximo de datos es 8"}
+    if len(np.unique(vectorx)) != len(vectorx):
+                return {"error": "El vector X no puede contener valores duplicados."}
     x = np.array(vectorx, dtype=float)
     y = np.array(vectory, dtype=float)
+    
+    # Ordenar los puntos por los valores de x
+    sorted_indices = np.argsort(x)
+    x = x[sorted_indices]
+    y = y[sorted_indices]
+    
     n = len(x)
     
     # Verificar que hay suficientes puntos
     if n < 2:
         return {
-            "message": "Se necesitan al menos 2 puntos para calcular un spline lineal.",
-            "successful": False,
-            "segments": [],
-            "equations": [],
+            "error": "Se necesitan al menos 2 puntos para calcular un spline lineal.",
         }
     
     segments = []
@@ -68,9 +78,7 @@ def spline_lineal(vectorx, vectory, png_filename: str = "static/imgs/spline_line
     fig.write_html(html_filename)
     
     return {
-        "message": "Spline lineal calculado con éxito.",
-        "successful": True,
-        "segments": segments,
-        "equations": equations,
+        "polinomio": equations,
+        "png_path": png_filename,
+        "html_path": html_filename
     }
-

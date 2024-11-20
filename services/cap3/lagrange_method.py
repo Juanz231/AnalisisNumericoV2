@@ -2,7 +2,14 @@ import numpy as np
 import matplotlib.pyplot as plt
 import plotly.graph_objects as go
 
-def lagrange(vectorx, vectory,png_filename: str = "static/imgs/lagrange_method/lagrange_plot.png", html_filename: str = "static/imgs/lagrange_method/lagrange_plot.html"):
+def lagrange_method(vectorx, vectory,png_filename: str = "static/imgs/lagrange_method/lagrange_plot.png", html_filename: str = "static/imgs/lagrange_method/lagrange_plot.html"):
+    if len(vectorx) != len(vectory):
+        return {"error": "Los vectores x e y deben tener la misma longitud."}
+    #Verificar que no hayan mas de 8 datos
+    if len(vectorx)>8:
+        return {"error": "El numero maximo de datos es 8"}
+    if len(np.unique(vectorx)) != len(vectorx):
+                return {"error": "El vector X no puede contener valores duplicados."}
     xv = np.array(vectorx, dtype=float)
     yv = np.array(vectory, dtype=float)
     n = len(xv)
@@ -27,6 +34,22 @@ def lagrange(vectorx, vectory,png_filename: str = "static/imgs/lagrange_method/l
     
     # Sumar los términos para obtener el polinomio final
     pol = np.sum(Tabla, axis=0)
+    
+    pol_r = pol[::-1]
+    n_pol = len(pol)
+    polynomial_terms = []
+    for i in range(n_pol):
+        if i == 0:
+            if pol_r [i] < 0:
+                polynomial_terms.append(f"-{abs(pol_r [i])}")
+            else:
+                polynomial_terms.append(f"+{abs(pol_r [i])}")
+        else:
+            polynomial_terms.append(f"+{pol_r [i]}*x^{i} ")
+
+    # Revertir los términos para que el polinomio esté en orden canónico
+    polynomial_terms.reverse()
+    pol_text = "".join(polynomial_terms).replace("+-", "-")
 
     # Mostrar el polinomio
     print("Polinomio de Lagrange (coeficientes):")
@@ -67,5 +90,8 @@ def lagrange(vectorx, vectory,png_filename: str = "static/imgs/lagrange_method/l
     # Save as HTML file
     fig.write_html(html_filename)
     
-    return pol
-
+    return {
+        "polinomio": f"El polinomio es: {pol_text}",
+        "png_path": png_filename,
+        "html_path": html_filename
+    }
