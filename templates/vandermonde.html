@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block title %}Método de Vandermonde{% endblock %}
+
+{% block content %}
+{% if input_error %}
+<div class="alert alert-danger alert-dismissible fade show position-fixed top-0 end-0 m-3 shadow" role="alert" style="z-index: 1055; min-width: 250px;">
+    <strong>Error:</strong> {{e}}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{% endif %}
+<div class="container my-5">
+    <h1 class="text-center text-primary mb-4">Método de Vandermonde</h1>
+    <p class="text-center">Método de Vandermonde para obtener el polinomio interpolante mediante matrices.</p>
+    <form method="POST" class="needs-validation" novalidate>
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="vectorX" class="form-label">Vector X (separado por comas):</label>
+                <input type="text" id="vectorX" name="vectorX" class="form-control" placeholder="ejemplo: 15,10,10" required>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label for="vectorB" class="form-label">Vector Y (separado por comas):</label>
+                <input type="text" id="vectorY" name="vectorY" class="form-control" placeholder="ejemplo: 2,3,4" required>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-6 d-flex align-items-end">
+                <button type="submit" class="btn btn-primary w-100">Calcular</button>
+            </div>
+        </div>
+    </form>
+
+    {% if result %}
+    <div class="mt-5">
+        <h2 class="text-success">Polinomio</h2>
+        <p>{{ polinomio }}</p>
+
+        <!-- Gráficos en una fila -->
+        <div class="row mt-4">
+            {% if html_path %}
+            <div class="col-md-6">
+                <h3 class="mt-4">Gráfico de Polinomio</h3>
+                <iframe src="{{ html_path }}" width="100%" height="500px" class="border"></iframe>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Botones de descarga en una fila debajo de los gráficos -->
+        <div class="row mt-4">
+            {% if png_path %}
+            <div class="col-md-6">
+                <h4 class="mt-4">Descargar Polinomio (PNG)</h4>
+                <a href="{{ png_path }}" class="btn btn-outline-primary" download>Descargar PNG</a>
+            </div>
+            {% endif %}
+        </div>
+
+    </div>
+    {% endif %}
+</div>
+
+{% if not result %}
+{% include "iterative_methods_alert.html" %}
+{% endif %}
+{% endblock %}
